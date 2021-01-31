@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Wazelin\UserTask\Command;
+namespace Wazelin\UserTask\Core\Presentation\Cli\Command;
 
-use Broadway\EventStore\Dbal\DBALEventStore;
+use Broadway\EventStore\EventStore;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateEventStoreSchemaCommand extends Command
 {
-    public function __construct(private Connection $connection, private DBALEventStore $eventStore)
+    public function __construct(private Connection $connection, private EventStore $eventStore)
     {
         parent::__construct();
     }
@@ -20,7 +20,7 @@ class CreateEventStoreSchemaCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('persistence:event-store:create')
+            ->setName('core:persistence:event-store:create')
             ->setDescription('Creates the event store schema')
             ->setHelp(
                 <<<HELP
@@ -39,7 +39,7 @@ class CreateEventStoreSchemaCommand extends Command
             $schemaManager->createTable($table);
             $output->writeln('<info>Created Broadway event store schema</info>');
         } else {
-            $output->writeln('<warning>Broadway event store schema already exists</warning>');
+            $output->writeln('<comment>Broadway event store schema already exists</comment>');
         }
 
         return Command::SUCCESS;
