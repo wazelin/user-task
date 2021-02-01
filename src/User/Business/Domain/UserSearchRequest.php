@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Wazelin\UserTask\User\Business\Domain;
 
+use Wazelin\UserTask\Core\Contract\IdentifiableSearchRequestInterface;
 use Wazelin\UserTask\Core\Traits\IdentifiableSearchRequestTrait;
 
-class UserSearchRequest
+class UserSearchRequest implements IdentifiableSearchRequestInterface
 {
     use IdentifiableSearchRequestTrait;
 

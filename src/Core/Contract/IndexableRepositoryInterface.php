@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Wazelin\UserTask\User\Contract;
+namespace Wazelin\UserTask\Core\Contract;
 
-interface IndexableRepository
+interface IndexableRepositoryInterface
 {
     public function createIndices(): bool;
 

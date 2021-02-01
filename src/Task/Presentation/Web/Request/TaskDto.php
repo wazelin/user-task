@@ -19,8 +19,7 @@ class TaskDto
     private ?string $description;
 
     /**
-     * @Assert\DateTime(format=DATE_ATOM)
-     * @Assert\GreaterThan("now")
+     * @Assert\DateTime(format="Y-m-d")
      */
     private ?string $dueDate;
 

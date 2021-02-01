@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Wazelin\UserTask\User\DataAccess\Repository;
+namespace Wazelin\UserTask\Task\DataAccess\Repository;
 
 use Broadway\ReadModel\ElasticSearch\ElasticSearchRepository;
 use Broadway\ReadModel\ElasticSearch\ElasticSearchRepositoryFactory;
 use Broadway\ReadModel\Repository;
 use Wazelin\UserTask\Core\Traits\IdentifiableSearchRequestRepositoryTrait;
-use Wazelin\UserTask\User\Business\Domain\User;
-use Wazelin\UserTask\User\Business\Domain\UserSearchRequest;
+use Wazelin\UserTask\Task\Business\Domain\Task;
+use Wazelin\UserTask\Task\Business\Domain\TaskSearchRequest;
+use Wazelin\UserTask\Task\Contract\TaskRepositoryInterface;
 use Wazelin\UserTask\Core\Contract\IndexableRepositoryInterface;
-use Wazelin\UserTask\User\Contract\UserRepositoryInterface;
 
-final class ElasticSearchUserRepository implements UserRepositoryInterface, IndexableRepositoryInterface
+final class ElasticSearchTaskRepository implements TaskRepositoryInterface, IndexableRepositoryInterface
 {
     use IdentifiableSearchRequestRepositoryTrait;
 
-    private const NAME = 'user';
+    private const NAME = 'task';
 
     private ElasticSearchRepository $repository;
 
@@ -26,19 +26,21 @@ final class ElasticSearchUserRepository implements UserRepositoryInterface, Inde
         /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->repository = $repositoryFactory->create(
             self::NAME,
-            User::class,
+            Task::class,
             [
-                User::FIELD_NAME,
+                Task::FIELD_SUMMARY,
+                Task::FIELD_STATUS,
+                TASK::FIELD_DUE_DATE,
             ]
         );
     }
 
-    public function persist(User $user): void
+    public function persist(Task $task): void
     {
-        $this->repository->save($user);
+        $this->repository->save($task);
     }
 
-    public function find(UserSearchRequest $searchRequest): array
+    public function find(TaskSearchRequest $searchRequest): array
     {
         $identifiableSearchResult = $this->findByIdentifier($searchRequest);
 
@@ -49,11 +51,15 @@ final class ElasticSearchUserRepository implements UserRepositoryInterface, Inde
         $searchFields = [];
 
         if ($searchRequest->hasId()) {
-            $searchFields[User::FIELD_ID] = $searchRequest->getId();
+            $searchFields[Task::FIELD_ID] = $searchRequest->getId();
         }
 
-        if ($searchRequest->hasName()) {
-            $searchFields[User::FIELD_NAME] = $searchRequest->getName();
+        if ($searchRequest->hasSummary()) {
+            $searchFields[Task::FIELD_SUMMARY] = $searchRequest->getSummary();
+        }
+
+        if ($searchRequest->hasDueDate()) {
+            $searchFields[Task::FIELD_DUE_DATE] = $searchRequest->getDueDate();
         }
 
         return $this->repository->findBy($searchFields);

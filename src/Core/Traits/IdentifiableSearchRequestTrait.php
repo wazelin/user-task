@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Wazelin\UserTask\Core\Traits;
 
-use JetBrains\PhpStorm\Pure;
-
 trait IdentifiableSearchRequestTrait
 {
     private ?string $id = null;
@@ -27,14 +25,14 @@ trait IdentifiableSearchRequestTrait
         return $this->id;
     }
 
-    #[Pure] public function hasIdOnly(): bool
+    public function hasIdOnly(): bool
     {
         $properties = $this->getProperties();
 
         return count($properties) === 1 && isset($properties['id']);
     }
 
-    #[Pure] public function isEmpty(): bool
+    public function isEmpty(): bool
     {
         return !$this->getProperties();
     }

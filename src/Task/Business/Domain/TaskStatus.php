@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\Task\Business\Domain;
 
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 
 final class TaskStatus
 {
@@ -19,17 +18,17 @@ final class TaskStatus
         self::DONE,
     ];
 
-    #[Pure] public static function open(): self
+    public static function open(): self
     {
         return new self(self::OPEN);
     }
 
-    #[Pure] public static function todo(): self
+    public static function todo(): self
     {
         return new self(self::TODO);
     }
 
-    #[Pure] public static function done(): self
+    public static function done(): self
     {
         return new self(self::DONE);
     }
@@ -43,6 +42,10 @@ final class TaskStatus
         return new self($value);
     }
 
+    public function __construct(private string $value)
+    {
+    }
+
     public function equals(self $status): bool
     {
         return (string)$this === (string)$status;
@@ -51,9 +54,5 @@ final class TaskStatus
     public function __toString(): string
     {
         return $this->value;
-    }
-
-    private function __construct(private string $value)
-    {
     }
 }

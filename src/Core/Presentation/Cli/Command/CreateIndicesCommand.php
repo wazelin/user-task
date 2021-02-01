@@ -8,13 +8,13 @@ use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Wazelin\UserTask\User\Contract\IndexableRepository;
+use Wazelin\UserTask\Core\Contract\IndexableRepositoryInterface;
 
 class CreateIndicesCommand extends Command
 {
     private array $repositories;
 
-    public function __construct(IndexableRepository ...$repositories)
+    public function __construct(IndexableRepositoryInterface ...$repositories)
     {
         parent::__construct();
 

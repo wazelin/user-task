@@ -7,7 +7,6 @@ namespace Wazelin\UserTask\Task\Business\Domain;
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use Broadway\ReadModel\Identifiable;
 use DateTimeInterface;
-use JetBrains\PhpStorm\Pure;
 use Wazelin\UserTask\Core\Business\Domain\Id;
 use Wazelin\UserTask\Task\Business\Domain\TaskEvent\TaskWasCreatedEvent;
 
@@ -36,7 +35,7 @@ final class Task extends EventSourcedAggregateRoot implements Identifiable
         return $task;
     }
 
-    #[Pure] public function getAggregateRootId(): string
+    public function getAggregateRootId(): string
     {
         return $this->getId();
     }
@@ -107,6 +106,7 @@ final class Task extends EventSourcedAggregateRoot implements Identifiable
         $this->status      = TaskStatus::open();
         $this->summary     = $event->getSummary();
         $this->description = $event->getDescription();
+        $this->dueDate     = $event->getDueDate();
 
         return $this;
     }

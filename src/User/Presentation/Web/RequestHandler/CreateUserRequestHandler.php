@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\User\Presentation\Web\RequestHandler;
 
 use Symfony\Component\HttpFoundation\Request;
+use TypeError;
 use Wazelin\UserTask\Core\Business\Service\IdGeneratorService;
 use Wazelin\UserTask\Core\Contract\WebRequestDataExtractorInterface;
 use Wazelin\UserTask\Core\Contract\Exception\InvalidRequestException;
@@ -29,9 +30,17 @@ class CreateUserRequestHandler
      */
     public function handle(Request $request): CreateUserCommand
     {
-        $requestData = new UserDto(
-            ...$this->extractor->extract($request)
-        );
+        try {
+            $requestData = new UserDto(
+                ...$this->extractor->extract($request)
+            );
+        } catch (TypeError $error) {
+            throw new InvalidRequestException(
+                $error->getMessage(),
+                $error->getCode(),
+                $error
+            );
+        }
 
         $this->validator->validate($requestData);
 

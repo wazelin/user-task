@@ -16,7 +16,7 @@ class UserCest
 
     public function setUpStorage(AcceptanceTester $I): void
     {
-        $this->cleanIndices($I);
+        $I->purgeReadModelIndices();
     }
 
     public function findNoUsers(AcceptanceTester $I): void
@@ -45,6 +45,21 @@ class UserCest
         $exampleData['id'] = $I->grabIdFromLocationHeader();
 
         $this->userDataExamples[] = $exampleData;
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     * @param Example $example
+     *
+     * @dataProvider invalidUserDataProvider
+     */
+    public function createInvalidUser(AcceptanceTester $I, Example $example): void
+    {
+        $exampleData = iterator_to_array($example);
+
+        $I->sendPost('users', $exampleData);
+
+        $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
 
     public function getCreatedUsersById(AcceptanceTester $I): void
@@ -93,7 +108,7 @@ class UserCest
 
     public function tearDownStorage(AcceptanceTester $I): void
     {
-        $this->cleanIndices($I);
+        $I->purgeReadModelIndices();
     }
 
     protected function userDataProvider(): array
@@ -104,8 +119,15 @@ class UserCest
         ];
     }
 
-    private function cleanIndices(AcceptanceTester $I): void
+    protected function invalidUserDataProvider(): array
     {
-        $I->runSymfonyConsoleCommand('core:persistence:read-model:create-indices');
+        return [
+            [
+                'name' => '',
+            ],
+            [
+                [],
+            ],
+        ];
     }
 }

@@ -6,7 +6,6 @@ namespace Wazelin\UserTask\User\Business\Domain;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use Broadway\ReadModel\Identifiable;
-use JetBrains\PhpStorm\Pure;
 use Wazelin\UserTask\Core\Business\Domain\Id;
 use Wazelin\UserTask\User\Business\Domain\UserEvent\UserWasCreatedEvent;
 
@@ -29,7 +28,7 @@ final class User extends EventSourcedAggregateRoot implements Identifiable
         return $user;
     }
 
-    #[Pure] public function getAggregateRootId(): string
+    public function getAggregateRootId(): string
     {
         return $this->getId();
     }

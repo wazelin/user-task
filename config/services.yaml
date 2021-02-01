@@ -38,18 +38,31 @@ services:
     resource: '../src/Task/Presentation/Web/Action/'
     tags: [ 'controller.service_arguments' ]
 
+  Symfony\Component\Serializer\Normalizer\DateTimeNormalizer:
+    tags: [ serializer.normalizer ]
+    arguments:
+      - datetime_format: 'Y-m-d'
+
   Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer:
+    tags: [ serializer.normalizer ]
+
+  Wazelin\UserTask\Core\Presentation\Serializer\Normalizer\StringableObjectNormalizer:
     tags: [ serializer.normalizer ]
 
   read_model.user_repository.elastic_search:
     class: Wazelin\UserTask\User\DataAccess\Repository\ElasticSearchUserRepository
 
+  read_model.task_repository.elastic_search:
+    class: Wazelin\UserTask\Task\DataAccess\Repository\ElasticSearchTaskRepository
+
   read_model.user_repository: '@read_model.user_repository.elastic_search'
+  read_model.task_repository: '@read_model.task_repository.elastic_search'
 
   Wazelin\UserTask\Core\Presentation\Cli\Command\CreateIndicesCommand:
     class: Wazelin\UserTask\Core\Presentation\Cli\Command\CreateIndicesCommand
     arguments:
       - '@read_model.user_repository'
+      - '@read_model.task_repository'
 
   Broadway\EventSourcing\EventSourcingRepository $userRepository:
     class: Broadway\EventSourcing\EventSourcingRepository
@@ -68,4 +81,7 @@ services:
     tags: [ 'broadway.command_handler' ]
 
   Wazelin\UserTask\User\Business\Projector\UserProjector:
+    tags: [ 'broadway.domain.event_listener' ]
+
+  Wazelin\UserTask\Task\Business\Projector\TaskProjector:
     tags: [ 'broadway.domain.event_listener' ]

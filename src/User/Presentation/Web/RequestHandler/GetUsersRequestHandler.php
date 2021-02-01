@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\User\Presentation\Web\RequestHandler;
 
 use Symfony\Component\HttpFoundation\Request;
+use TypeError;
 use Wazelin\UserTask\Core\Contract\Exception\InvalidRequestException;
 use Wazelin\UserTask\Core\Presentation\Web\RequestHandler\RequestDataValidator;
 use Wazelin\UserTask\User\Business\Query\GetUsersQuery;
@@ -24,9 +25,17 @@ class GetUsersRequestHandler
      */
     public function handle(Request $request): GetUsersQuery
     {
-        $requestData = new FindUsersDto(
-            ...$request->query->all()
-        );
+        try {
+            $requestData = new FindUsersDto(
+                ...$request->query->all()
+            );
+        } catch (TypeError $error) {
+            throw new InvalidRequestException(
+                $error->getMessage(),
+                $error->getCode(),
+                $error
+            );
+        }
 
         $this->validator->validate($requestData);
 

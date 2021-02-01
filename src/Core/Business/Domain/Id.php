@@ -22,9 +22,4 @@ final class Id
     {
         return $this->value;
     }
-
-    public function getValue(): string
-    {
-        return $this->value;
-    }
 }
