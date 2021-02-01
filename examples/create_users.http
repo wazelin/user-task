@@ -1,5 +1,4 @@
 POST http://localhost/api/v1/users
-Host: user-task.docker
 Accept: application/json
 Content-Type: application/json
 
@@ -16,7 +15,6 @@ client.test("Request executed successfully", function() {
 ###
 
 POST http://localhost/api/v1/users
-Host: user-task.docker
 Accept: application/json
 Content-Type: application/json
 

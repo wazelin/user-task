@@ -7,7 +7,7 @@ namespace Wazelin\UserTask\User\Presentation\Web\RequestHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Wazelin\UserTask\Core\Business\Service\IdGeneratorService;
 use Wazelin\UserTask\Core\Contract\WebRequestDataExtractorInterface;
-use Wazelin\UserTask\Core\Presentation\Web\RequestHandler\InvalidRequestException;
+use Wazelin\UserTask\Core\Contract\Exception\InvalidRequestException;
 use Wazelin\UserTask\Core\Presentation\Web\RequestHandler\RequestDataValidator;
 use Wazelin\UserTask\User\Command\CreateUserCommand;
 use Wazelin\UserTask\User\Presentation\Web\Request\UserDto;

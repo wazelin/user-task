@@ -1,0 +1,19 @@
+namespace: Wazelin\UserTask\Tests
+paths:
+    tests: tests
+    output: tests/_output
+    data: tests/_data
+    support: tests/_support
+actor_suffix: Tester
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+params:
+    - .env
+coverage:
+    enabled: true
+    remote: false
+    work_dir: /var/www/html
+    show_uncovered: true
+    include:
+        - src/*

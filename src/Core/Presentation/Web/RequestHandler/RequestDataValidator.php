@@ -6,6 +6,7 @@ namespace Wazelin\UserTask\Core\Presentation\Web\RequestHandler;
 
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Wazelin\UserTask\Core\Contract\Exception\InvalidRequestException;
 
 class RequestDataValidator
 {

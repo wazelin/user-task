@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  elasticsearch:
+    ports:
+      - 9200:9200
+
+  mysql:
+    ports:
+      - 3306:3306

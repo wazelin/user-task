@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "broadway/broadway-bundle": "^0.5.0",
         "broadway/event-store-dbal": "^0.5.0",
+        "broadway/read-model-elasticsearch": "^0.7.1",
         "doctrine/annotations": "^1.11",
         "doctrine/doctrine-bundle": "^2.2",
         "ramsey/uuid": "^4.1",
@@ -34,7 +35,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Wazelin\\UserTask\\Tests\\": "tests/"
+            "Wazelin\\UserTask\\Tests\\": "tests/_support",
+            "Wazelin\\UserTask\\Tests\\Acceptance\\": "tests/acceptance",
+            "Wazelin\\UserTask\\Tests\\Unit\\": "tests/unit"
         }
     },
     "replace": {
@@ -64,7 +67,12 @@
         }
     },
     "require-dev": {
-        "roave/security-advisories": "dev-master",
-        "symfony/phpunit-bridge": "^5.2"
+        "codeception/codeception": "^4.1",
+        "codeception/module-phpbrowser": "^1.0",
+        "codeception/module-rest": "^1.2",
+        "codeception/module-symfony": "^1.6",
+        "codeception/phpunit-wrapper": "^9.0",
+        "phpunit/phpunit": "^9.5",
+        "roave/security-advisories": "dev-master"
     }
 }

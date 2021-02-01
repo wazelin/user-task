@@ -16,6 +16,13 @@ final class UserWasCreatedEvent implements Serializable
     {
     }
 
+    public static function deserialize(array $data): self
+    {
+        $data['id'] = new Id($data['id'] ?? '');
+
+        return new self(...$data);
+    }
+
     public function getId(): Id
     {
         return $this->id;

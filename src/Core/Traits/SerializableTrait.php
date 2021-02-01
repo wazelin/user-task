@@ -11,23 +11,19 @@ trait SerializableTrait
 {
     public function serialize(): array
     {
-        return array_map(
-            function (string $property): mixed {
-                $value = $this->$property;
+        $data = [];
 
-                return match(true) {
-                    $value instanceof Serializable => $value->serialize(),
-                    $value instanceof Stringable => (string)$value,
-                    default => $value
-                };
-            },
-            static::getProperties()
-        );
-    }
+        foreach (static::getProperties() as $property) {
+            $value = $this->$property;
 
-    public static function deserialize(array $data): self
-    {
-        return new self(...$data);
+            $data[$property] = match(true) {
+                $value instanceof Serializable => $value->serialize(),
+                $value instanceof Stringable => (string)$value,
+                default => $value
+            };
+        }
+
+        return $data;
     }
 
     abstract protected static function getProperties(): array;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wazelin\UserTask\Core\Presentation\Web\RequestHandler;
+namespace Wazelin\UserTask\Core\Contract\Exception;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;

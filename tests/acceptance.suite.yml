@@ -1,0 +1,17 @@
+actor: AcceptanceTester
+modules:
+  enabled:
+    - Symfony:
+        kernel_class: 'Wazelin\UserTask\Kernel'
+        app_path: 'src'
+        environment: 'test'
+    - REST:
+        url: http://nginx/api/v1
+        depends: PhpBrowser
+        part: Json
+  config:
+    PhpBrowser:
+      url: http://nginx/api/v1
+      headers:
+        Content-Type: 'application/json'
+      timeout: 5

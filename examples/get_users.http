@@ -1,0 +1,35 @@
+GET http://localhost/api/v1/users
+Host: user-task.docker
+Accept: application/json
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+
+GET http://localhost/api/v1/users?name=Alice
+Host: user-task.docker
+Accept: application/json
+
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+
+GET http://localhost/api/v1/users/<id>
+Host: user-task.docker
+Accept: application/json
+
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}

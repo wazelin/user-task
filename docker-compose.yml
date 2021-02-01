@@ -1,6 +1,15 @@
-version: '3.8'
+version: '3.7'
 
 services:
+  elasticsearch:
+    image: elasticsearch:7.10.1
+    expose:
+      - 9200
+    networks:
+      - user-task
+    environment:
+      - discovery.type=single-node
+
   mysql:
     image: mysql:5.7
     expose:
@@ -36,6 +45,7 @@ services:
       - .:/var/www/html
     depends_on:
       - mysql
+      - elasticsearch
 
 networks:
   user-task:

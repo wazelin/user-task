@@ -1,0 +1,7 @@
+actor: UnitTester
+modules:
+  enabled:
+    - Symfony:
+        kernel_class: 'Wazelin\UserTask\Kernel'
+        app_path: 'src'
+        environment: 'test'

@@ -4,6 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+  elasticsearch:
+    hosts: [ '%env(resolve:ELASTIC_HOST)%' ]
 
 services:
   # default configuration for services in *this* file
@@ -13,6 +15,7 @@ services:
     bind:
       $eventStreamDecorators:
         - '@broadway.metadata_enriching_event_stream_decorator'
+      Broadway\ReadModel\ElasticSearch\ElasticSearchRepositoryFactory: '@broadway.read_model.elasticsearch.repository_factory'
 
   # makes classes in src/ available to be used as services
   # this creates a service per class whose id is the fully-qualified class name
@@ -31,6 +34,16 @@ services:
     resource: '../src/User/Presentation/Web/Action/'
     tags: [ 'controller.service_arguments' ]
 
+  read_model.user_repository.elastic_search:
+    class: Wazelin\UserTask\User\DataAccess\Repository\ElasticSearchUserRepository
+
+  read_model.user_repository: '@read_model.user_repository.elastic_search'
+
+  Wazelin\UserTask\Core\Presentation\Cli\Command\CreateIndicesCommand:
+    class: Wazelin\UserTask\Core\Presentation\Cli\Command\CreateIndicesCommand
+    arguments:
+      - '@read_model.user_repository'
+
   Broadway\EventSourcing\EventSourcingRepository $userRepository:
     class: Broadway\EventSourcing\EventSourcingRepository
     arguments:
@@ -38,3 +51,6 @@ services:
 
   Wazelin\UserTask\User\Command\CreateUserCommandHandler:
     tags: [ 'broadway.command_handler' ]
+
+  Wazelin\UserTask\User\Business\Projector\UserProjector:
+    tags: [ 'broadway.domain.event_listener' ]
