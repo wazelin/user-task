@@ -5,20 +5,17 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\User\Business\Domain;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
-use Broadway\ReadModel\SerializableReadModel;
+use Broadway\ReadModel\Identifiable;
+use JetBrains\PhpStorm\Pure;
 use Wazelin\UserTask\Core\Business\Domain\Id;
-use Wazelin\UserTask\Core\Traits\SerializableTrait;
 use Wazelin\UserTask\User\Business\Domain\UserEvent\UserWasCreatedEvent;
 
-final class User extends EventSourcedAggregateRoot implements SerializableReadModel
+final class User extends EventSourcedAggregateRoot implements Identifiable
 {
-    use SerializableTrait;
-
     public const FIELD_ID   = 'id';
     public const FIELD_NAME = 'name';
 
-    private Id $id;
-
+    private string $id;
     private string $name;
 
     public static function create(Id $id, string $name): self
@@ -32,27 +29,21 @@ final class User extends EventSourcedAggregateRoot implements SerializableReadMo
         return $user;
     }
 
-    public static function deserialize(array $data): self
+    #[Pure] public function getAggregateRootId(): string
     {
-        $data[self::FIELD_ID] = new Id($data[self::FIELD_ID] ?? '');
-
-        $user = new self();
-
-        foreach ($data as $property => $value) {
-            $user->$property = $value;
-        }
-
-        return $user;
-    }
-
-    public function getAggregateRootId(): string
-    {
-        return (string)$this->id;
+        return $this->getId();
     }
 
     public function getId(): string
     {
-        return (string)$this->id;
+        return $this->id;
+    }
+
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): string
@@ -60,19 +51,18 @@ final class User extends EventSourcedAggregateRoot implements SerializableReadMo
         return $this->name;
     }
 
-    public function applyUserWasCreatedEvent(UserWasCreatedEvent $event): self
+    public function setName(string $name): self
     {
-        $this->id   = $event->id;
-        $this->name = $event->name;
+        $this->name = $name;
 
         return $this;
     }
 
-    protected static function getProperties(): array
+    public function applyUserWasCreatedEvent(UserWasCreatedEvent $event): self
     {
-        return [
-            self::FIELD_ID,
-            self::FIELD_NAME
-        ];
+        $this->id   = (string)$event->getId();
+        $this->name = $event->getName();
+
+        return $this;
     }
 }

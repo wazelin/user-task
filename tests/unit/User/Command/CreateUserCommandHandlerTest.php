@@ -15,8 +15,8 @@ use Broadway\UuidGenerator\UuidGeneratorInterface;
 use Wazelin\UserTask\Core\Business\Domain\Id;
 use Wazelin\UserTask\User\Business\Domain\User;
 use Wazelin\UserTask\User\Business\Domain\UserEvent\UserWasCreatedEvent;
-use Wazelin\UserTask\User\Command\CreateUserCommand;
-use Wazelin\UserTask\User\Command\CreateUserCommandHandler;
+use Wazelin\UserTask\User\Business\Command\CreateUserCommand;
+use Wazelin\UserTask\User\Business\Command\CreateUserCommandHandler;
 
 class CreateUserCommandHandlerTest extends CommandHandlerScenarioTestCase
 {

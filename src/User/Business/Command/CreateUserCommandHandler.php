@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wazelin\UserTask\User\Command;
+namespace Wazelin\UserTask\User\Business\Command;
 
 use Broadway\EventSourcing\EventSourcingRepository;
 use Wazelin\UserTask\Core\Command\AbstractCommandHandler;

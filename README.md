@@ -23,3 +23,9 @@ $ make stop
 ```shell
 $ make ci
 ```
+
+# Out of scope
+- Authentication
+- Authorization
+- Non-blocking event bus
+- Restful API documentation

@@ -34,6 +34,13 @@ services:
     resource: '../src/User/Presentation/Web/Action/'
     tags: [ 'controller.service_arguments' ]
 
+  Wazelin\UserTask\Task\Presentation\Web\Action\:
+    resource: '../src/Task/Presentation/Web/Action/'
+    tags: [ 'controller.service_arguments' ]
+
+  Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer:
+    tags: [ serializer.normalizer ]
+
   read_model.user_repository.elastic_search:
     class: Wazelin\UserTask\User\DataAccess\Repository\ElasticSearchUserRepository
 
@@ -49,7 +56,15 @@ services:
     arguments:
       $aggregateClass: Wazelin\UserTask\User\Business\Domain\User
 
-  Wazelin\UserTask\User\Command\CreateUserCommandHandler:
+  Broadway\EventSourcing\EventSourcingRepository $taskRepository:
+    class: Broadway\EventSourcing\EventSourcingRepository
+    arguments:
+      $aggregateClass: Wazelin\UserTask\Task\Business\Domain\Task
+
+  Wazelin\UserTask\User\Business\Command\CreateUserCommandHandler:
+    tags: [ 'broadway.command_handler' ]
+
+  Wazelin\UserTask\Task\Business\Command\CreateTaskCommandHandler:
     tags: [ 'broadway.command_handler' ]
 
   Wazelin\UserTask\User\Business\Projector\UserProjector:

@@ -3,3 +3,9 @@ user_actions:
   type: annotation
   prefix: api/v1/users
   trailing_slash_on_root: false
+
+task_actions:
+  resource: ../../src/Task/Presentation/Web/Action/
+  type: annotation
+  prefix: api/v1/tasks
+  trailing_slash_on_root: false

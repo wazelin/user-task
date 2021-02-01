@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wazelin\UserTask\User\Command;
+namespace Wazelin\UserTask\User\Business\Command;
 
 use Wazelin\UserTask\Core\Business\Domain\Id;
 

@@ -15,6 +15,9 @@ class UserView implements JsonSerializable
 
     public function jsonSerialize(): array
     {
-        return $this->user->serialize();
+        return [
+            'id'   => $this->user->getId(),
+            'name' => $this->user->getName(),
+        ];
     }
 }
