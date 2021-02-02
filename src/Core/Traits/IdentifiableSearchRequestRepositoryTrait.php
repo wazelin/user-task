@@ -16,9 +16,9 @@ trait IdentifiableSearchRequestRepositoryTrait
         }
 
         if ($searchRequest->hasIdOnly()) {
-            $user = $this->getRepository()->find($searchRequest->getId());
+            $entity = $this->getRepository()->find($searchRequest->getId());
 
-            return $user ? [$user] : [];
+            return $entity ? [$entity] : [];
         }
 
         return null;

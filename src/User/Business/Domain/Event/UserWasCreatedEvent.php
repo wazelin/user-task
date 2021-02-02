@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wazelin\UserTask\User\Business\Domain\UserEvent;
+namespace Wazelin\UserTask\User\Business\Domain\Event;
 
 use Wazelin\UserTask\Core\Business\Domain\Id;
 

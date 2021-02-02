@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\Task\Presentation\Web\Responder\View\Json;
 
 use JsonSerializable;
-use Wazelin\UserTask\Task\Business\Domain\Task;
+use Wazelin\UserTask\Task\Business\Domain\ReadModel\Task;
 
 class TasksView implements JsonSerializable
 {

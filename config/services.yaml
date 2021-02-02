@@ -26,8 +26,10 @@ services:
       - '../src/DependencyInjection/'
       - '../src/Kernel.php'
       - '../src/Task/Business/Domain'
+      - '../src/Task/DataAccess/ReadModel'
       - '../src/Task/Presentation/Web/Request'
       - '../src/User/Business/Domain'
+      - '../src/User/DataAccess/ReadModel'
       - '../src/User/Presentation/Web/Request'
 
   # controllers are imported separately to make sure services can be injected
@@ -79,8 +81,14 @@ services:
   Wazelin\UserTask\User\Business\Command\CreateUserCommandHandler:
     tags: [ 'broadway.command_handler' ]
 
+  Wazelin\UserTask\Assignment\Business\Command\AssignCommandHandler:
+    tags: [ 'broadway.command_handler' ]
+
   Wazelin\UserTask\Task\Business\Command\CreateTaskCommandHandler:
     tags: [ 'broadway.command_handler' ]
+
+  Wazelin\UserTask\Assignment\Business\Projector\AssignmentProjector:
+    tags: [ 'broadway.domain.event_listener' ]
 
   Wazelin\UserTask\User\Business\Projector\UserProjector:
     tags: [ 'broadway.domain.event_listener' ]

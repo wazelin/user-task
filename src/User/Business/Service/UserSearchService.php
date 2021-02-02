@@ -6,7 +6,7 @@ namespace Wazelin\UserTask\User\Business\Service;
 
 use Wazelin\UserTask\Core\Contract\Exception\EntityNotFoundException;
 use Wazelin\UserTask\User\Business\Contract\UserSearchQueryInterface;
-use Wazelin\UserTask\User\Business\Domain\User;
+use Wazelin\UserTask\User\Business\Domain\ReadModel\User;
 use Wazelin\UserTask\User\Contract\UserRepositoryInterface;
 
 class UserSearchService

@@ -5,16 +5,12 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\User\Business\Domain;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
-use Broadway\ReadModel\Identifiable;
 use Wazelin\UserTask\Core\Business\Domain\Id;
-use Wazelin\UserTask\User\Business\Domain\UserEvent\UserWasCreatedEvent;
+use Wazelin\UserTask\User\Business\Domain\Event\UserWasCreatedEvent;
 
-final class User extends EventSourcedAggregateRoot implements Identifiable
+final class User extends EventSourcedAggregateRoot
 {
-    public const FIELD_ID   = 'id';
-    public const FIELD_NAME = 'name';
-
-    private string $id;
+    private Id     $id;
     private string $name;
 
     public static function create(Id $id, string $name): self
@@ -30,19 +26,12 @@ final class User extends EventSourcedAggregateRoot implements Identifiable
 
     public function getAggregateRootId(): string
     {
-        return $this->getId();
+        return (string)$this->getId();
     }
 
-    public function getId(): string
+    public function getId(): Id
     {
         return $this->id;
-    }
-
-    public function setId(string $id): self
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getName(): string
@@ -50,16 +39,9 @@ final class User extends EventSourcedAggregateRoot implements Identifiable
         return $this->name;
     }
 
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
     public function applyUserWasCreatedEvent(UserWasCreatedEvent $event): self
     {
-        $this->id   = (string)$event->getId();
+        $this->id   = $event->getId();
         $this->name = $event->getName();
 
         return $this;

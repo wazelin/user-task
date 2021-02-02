@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\Task\Business\Projector;
 
 use Broadway\ReadModel\Projector;
-use Wazelin\UserTask\Task\Business\Domain\Task;
-use Wazelin\UserTask\Task\Business\Domain\TaskEvent\TaskWasCreatedEvent;
+use Wazelin\UserTask\Task\Business\Domain\Event\TaskStatusWasChangedEvent;
+use Wazelin\UserTask\Task\Business\Domain\Event\TaskWasCreatedEvent;
 use Wazelin\UserTask\Task\Contract\TaskRepositoryInterface;
+use Wazelin\UserTask\Task\Business\Domain\ReadModel\Task;
 
 class TaskProjector extends Projector
 {
@@ -18,7 +19,28 @@ class TaskProjector extends Projector
     protected function applyTaskWasCreatedEvent(TaskWasCreatedEvent $event): void
     {
         $this->repository->persist(
-            (new Task())->applyTaskWasCreatedEvent($event)
+            new Task(
+                (string)$event->getId(),
+                $event->getStatus(),
+                $event->getSummary(),
+                $event->getDescription(),
+                $event->getDueDate()
+            )
+        );
+    }
+
+    protected function applyTaskStatusWasChangedEvent(TaskStatusWasChangedEvent $event): void
+    {
+        $task = $this->repository->findOneById((string)$event->getTaskId());
+
+        if (null === $task) {
+            return;
+        }
+
+        $this->repository->persist(
+            $task->setStatus(
+                $event->getStatus()
+            )
         );
     }
 }

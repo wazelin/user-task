@@ -17,6 +17,7 @@ class BroadwaySerializer implements Serializer
         private SerializerInterface $serializer,
         private string $format = 'json',
         private array $ignoredAttributes = [
+            'aggregateRootId',
             'uncommittedEvents',
             'childEntities',
             'playhead',

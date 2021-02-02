@@ -8,7 +8,7 @@ use Broadway\ReadModel\ElasticSearch\ElasticSearchRepository;
 use Broadway\ReadModel\ElasticSearch\ElasticSearchRepositoryFactory;
 use Broadway\ReadModel\Repository;
 use Wazelin\UserTask\Core\Traits\IdentifiableSearchRequestRepositoryTrait;
-use Wazelin\UserTask\User\Business\Domain\User;
+use Wazelin\UserTask\User\Business\Domain\ReadModel\User;
 use Wazelin\UserTask\User\Business\Domain\UserSearchRequest;
 use Wazelin\UserTask\Core\Contract\IndexableRepositoryInterface;
 use Wazelin\UserTask\User\Contract\UserRepositoryInterface;
@@ -57,6 +57,12 @@ final class ElasticSearchUserRepository implements UserRepositoryInterface, Inde
         }
 
         return $this->repository->findBy($searchFields);
+    }
+
+    public function findOneById(string $id): ?User
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->repository->find($id);
     }
 
     public function createIndices(): bool

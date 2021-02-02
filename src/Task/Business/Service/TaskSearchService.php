@@ -6,8 +6,8 @@ namespace Wazelin\UserTask\Task\Business\Service;
 
 use Wazelin\UserTask\Core\Contract\Exception\EntityNotFoundException;
 use Wazelin\UserTask\Task\Business\Contract\TaskSearchQueryInterface;
-use Wazelin\UserTask\Task\Business\Domain\Task;
 use Wazelin\UserTask\Task\Contract\TaskRepositoryInterface;
+use Wazelin\UserTask\Task\Business\Domain\ReadModel\Task;
 
 class TaskSearchService
 {

@@ -6,10 +6,10 @@ namespace Wazelin\UserTask\Task\Presentation\Web\Responder;
 
 use Symfony\Component\HttpFoundation\Response;
 use Wazelin\UserTask\Core\Presentation\Web\Responder\JsonResponder;
-use Wazelin\UserTask\Task\Business\Domain\Task;
+use Wazelin\UserTask\Task\Business\Domain\ReadModel\Task;
 use Wazelin\UserTask\Task\Presentation\Web\Responder\View\Json\TasksView;
 
-class GetTasksResponder
+final class GetTasksResponder
 {
     public function __construct(private JsonResponder $responder)
     {

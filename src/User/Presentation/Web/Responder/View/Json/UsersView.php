@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\User\Presentation\Web\Responder\View\Json;
 
 use JsonSerializable;
-use Wazelin\UserTask\User\Business\Domain\User;
+use Wazelin\UserTask\User\Business\Domain\ReadModel\User;
 
 class UsersView implements JsonSerializable
 {

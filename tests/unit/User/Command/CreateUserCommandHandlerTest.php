@@ -13,10 +13,10 @@ use Broadway\EventStore\EventStore;
 use Broadway\UuidGenerator\Rfc4122\Version4Generator;
 use Broadway\UuidGenerator\UuidGeneratorInterface;
 use Wazelin\UserTask\Core\Business\Domain\Id;
-use Wazelin\UserTask\User\Business\Domain\User;
-use Wazelin\UserTask\User\Business\Domain\UserEvent\UserWasCreatedEvent;
+use Wazelin\UserTask\User\Business\Domain\Event\UserWasCreatedEvent;
 use Wazelin\UserTask\User\Business\Command\CreateUserCommand;
 use Wazelin\UserTask\User\Business\Command\CreateUserCommandHandler;
+use Wazelin\UserTask\User\Business\Domain\ReadModel\User;
 
 class CreateUserCommandHandlerTest extends CommandHandlerScenarioTestCase
 {

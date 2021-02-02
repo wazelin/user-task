@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Wazelin\UserTask\Task\Contract;
 
-use Wazelin\UserTask\Task\Business\Domain\Task;
 use Wazelin\UserTask\Task\Business\Domain\TaskSearchRequest;
+use Wazelin\UserTask\Task\Business\Domain\ReadModel\Task;
 
 interface TaskRepositoryInterface
 {
@@ -16,4 +16,6 @@ interface TaskRepositoryInterface
      * @return Task[]
      */
     public function find(TaskSearchRequest $searchRequest): array;
+
+    public function findOneById(string $id): ?Task;
 }
