@@ -6,9 +6,6 @@ DOCKER_COMPOSE_TEST=docker-compose -f docker-compose.yml -f docker-compose-test.
 install:
 	docker run --rm --volume $(CURDIR):/app composer install --ignore-platform-reqs
 
-.PHONY: spin-up
-spin-up: start wait-for-storage
-
 .PHONY: start
 start: install
 	docker-compose up -d --build
@@ -30,9 +27,11 @@ test: prepare-test
 
 .PHONY: wait-for-storage
 wait-for-storage:
-	./docker/mysql/wait.sh
+	./docker/mysql/wait.sh \
+		&& ./docker/elasticsearch/wait.sh
 
 .PHONY: prepare-storage
 prepare-storage: wait-for-storage
 	docker-compose exec php-fpm ./bin/console core:persistence:event-store:create \
 		&& docker-compose exec php-fpm ./bin/console core:persistence:read-model:create-indices
+
