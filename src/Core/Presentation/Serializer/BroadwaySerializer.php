@@ -8,12 +8,20 @@ use Assert\Assertion as Assert;
 use Broadway\Serializer\SerializationException;
 use Broadway\Serializer\Serializer;
 use Exception;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class BroadwaySerializer implements Serializer
 {
-    public function __construct(private SerializerInterface $serializer, private string $format = 'json')
-    {
+    public function __construct(
+        private SerializerInterface $serializer,
+        private string $format = 'json',
+        private array $ignoredAttributes = [
+            'uncommittedEvents',
+            'childEntities',
+            'playhead',
+        ]
+    ) {
     }
 
     public function serialize($object): array
@@ -21,7 +29,11 @@ class BroadwaySerializer implements Serializer
         try {
             return [
                 'class'   => $object::class,
-                'payload' => $this->serializer->serialize($object, $this->format),
+                'payload' => $this->serializer->serialize(
+                    $object,
+                    $this->format,
+                    $this->createContext()
+                ),
             ];
         } catch (Exception $exception) {
             throw new SerializationException($exception->getMessage(), $exception->getCode(), $exception);
@@ -41,10 +53,16 @@ class BroadwaySerializer implements Serializer
                     ? $this->serializer->serialize($serializedObject['payload'], $this->format)
                     : $serializedObject['payload'],
                 $serializedObject['class'],
-                $this->format
+                $this->format,
+                $this->createContext()
             );
         } catch (Exception $exception) {
             throw new SerializationException($exception->getMessage(), $exception->getCode(), $exception);
         }
+    }
+
+    private function createContext(): array
+    {
+        return [AbstractNormalizer::IGNORED_ATTRIBUTES => $this->ignoredAttributes];
     }
 }

@@ -9,17 +9,13 @@ use Wazelin\UserTask\User\Business\Domain\UserSearchRequest;
 
 class GetUsersQuery implements UserSearchQueryInterface
 {
-    public function __construct(private ?string $id = null, private ?string $name = null)
+    public function __construct(private ?string $name)
     {
     }
 
     public function getSearchRequest(): UserSearchRequest
     {
         $searchRequest = new UserSearchRequest();
-
-        if (isset($this->id)) {
-            $searchRequest->setId($this->id);
-        }
 
         if (isset($this->name)) {
             $searchRequest->setName($this->name);

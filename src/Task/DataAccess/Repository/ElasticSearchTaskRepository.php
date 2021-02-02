@@ -28,7 +28,6 @@ final class ElasticSearchTaskRepository implements TaskRepositoryInterface, Inde
             self::NAME,
             Task::class,
             [
-                Task::FIELD_SUMMARY,
                 Task::FIELD_STATUS,
                 TASK::FIELD_DUE_DATE,
             ]
@@ -54,8 +53,8 @@ final class ElasticSearchTaskRepository implements TaskRepositoryInterface, Inde
             $searchFields[Task::FIELD_ID] = $searchRequest->getId();
         }
 
-        if ($searchRequest->hasSummary()) {
-            $searchFields[Task::FIELD_SUMMARY] = $searchRequest->getSummary();
+        if ($searchRequest->hasStatus()) {
+            $searchFields[Task::FIELD_STATUS] = $searchRequest->getStatus();
         }
 
         if ($searchRequest->hasDueDate()) {

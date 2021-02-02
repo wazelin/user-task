@@ -6,6 +6,8 @@ namespace Wazelin\UserTask\Tests\Acceptance;
 
 use Codeception\Example;
 use Codeception\Util\HttpCode;
+use Ramsey\Uuid\Uuid;
+use Wazelin\UserTask\Task\Business\Domain\TaskStatus;
 use Wazelin\UserTask\Tests\AcceptanceTester;
 
 class TaskCest
@@ -16,6 +18,14 @@ class TaskCest
     public function setUpStorage(AcceptanceTester $I): void
     {
         $I->purgeReadModelIndices();
+    }
+
+    public function findNoTasks(AcceptanceTester $I): void
+    {
+        $I->sendGet('tasks');
+
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->seeResponseContainsJson();
     }
 
     /**
@@ -33,7 +43,8 @@ class TaskCest
         $I->seeResponseCodeIs(HttpCode::ACCEPTED);
         $I->seeHttpHeader('Location');
 
-        $exampleData['id'] = $I->grabIdFromLocationHeader();
+        $exampleData['id']     = $I->grabIdFromLocationHeader();
+        $exampleData['status'] = (string)TaskStatus::open();
 
         $this->taskDataExamples[] = $exampleData;
     }
@@ -53,6 +64,64 @@ class TaskCest
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
 
+    public function getCreatedTasksById(AcceptanceTester $I): void
+    {
+        foreach ($this->taskDataExamples as $example) {
+            $I->sendGet("tasks/{$example['id']}");
+
+            $I->seeResponseCodeIs(HttpCode::OK);
+            $I->seeResponseContainsJson($example);
+        }
+    }
+
+    public function findCreatedTasks(AcceptanceTester $I): void
+    {
+        $I->sendGet('tasks');
+
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->seeResponseContainsJson($this->taskDataExamples);
+    }
+
+    public function findCreatedTasksByStatus(AcceptanceTester $I): void
+    {
+        foreach ($this->taskDataExamples as $example) {
+            $I->sendGet("tasks?status={$example['status']}");
+
+            $I->seeResponseCodeIs(HttpCode::OK);
+            $I->seeResponseContainsJson([$example]);
+        }
+    }
+
+    public function findCreatedTasksByDueDate(AcceptanceTester $I): void
+    {
+        foreach ($this->taskDataExamples as $example) {
+            if (!isset($example['dueDate'])) {
+                continue;
+            }
+
+            $I->sendGet("tasks?dueDate={$example['dueDate']}");
+
+            $I->seeResponseCodeIs(HttpCode::OK);
+            $I->seeResponseContainsJson([$example]);
+        }
+    }
+
+    public function searchNonexistentTask(AcceptanceTester $I): void
+    {
+        $id = Uuid::uuid4();
+
+        $I->sendGet("tasks/$id");
+
+        $I->seeResponseCodeIs(HttpCode::NOT_FOUND);
+    }
+
+    public function searchTaskByInvalidId(AcceptanceTester $I): void
+    {
+        $I->sendGet('tasks/not-an-id');
+
+        $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
+    }
+
     public function tearDownStorage(AcceptanceTester $I): void
     {
         $I->purgeReadModelIndices();
@@ -63,11 +132,11 @@ class TaskCest
         return [
             [
                 'description' => 'description_1',
-                'summary'     => 'summary_2',
+                'summary'     => 'summary_1',
                 'dueDate'     => '2020-01-05',
             ],
             [
-                'description' => 'description_1',
+                'description' => 'description_2',
                 'summary'     => 'summary_2',
             ],
         ];

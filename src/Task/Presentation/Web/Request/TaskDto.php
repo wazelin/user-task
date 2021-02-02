@@ -27,7 +27,7 @@ class TaskDto
     {
         $this->summary     = $summary;
         $this->description = $description;
-        $this->dueDate = $dueDate;
+        $this->dueDate     = $dueDate;
     }
 
     public function getSummary(): string

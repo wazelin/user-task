@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Wazelin\UserTask\User\Presentation\Web\RequestHandler;
+namespace Wazelin\UserTask\Task\Presentation\Web\RequestHandler;
 
+use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;
 use TypeError;
 use Wazelin\UserTask\Core\Contract\Exception\InvalidRequestException;
 use Wazelin\UserTask\Core\Presentation\Web\RequestHandler\RequestDataValidator;
-use Wazelin\UserTask\User\Business\Query\GetUsersQuery;
-use Wazelin\UserTask\User\Presentation\Web\Request\FindUsersDto;
+use Wazelin\UserTask\Task\Business\Domain\TaskStatus;
+use Wazelin\UserTask\Task\Business\Query\GetTasksQuery;
+use Wazelin\UserTask\Task\Presentation\Web\Request\FindTasksDto;
 
-class GetUsersRequestHandler
+class GetTasksRequestHandler
 {
     public function __construct(private RequestDataValidator $validator)
     {
@@ -19,14 +21,14 @@ class GetUsersRequestHandler
 
     /**
      * @param Request $request
-     * @return GetUsersQuery
+     * @return GetTasksQuery
      *
      * @throws InvalidRequestException
      */
-    public function handle(Request $request): GetUsersQuery
+    public function handle(Request $request): GetTasksQuery
     {
         try {
-            $requestData = new FindUsersDto(
+            $requestData = new FindTasksDto(
                 ...$request->query->all()
             );
         } catch (TypeError $error) {
@@ -39,8 +41,13 @@ class GetUsersRequestHandler
 
         $this->validator->validate($requestData);
 
-        return new GetUsersQuery(
-            $requestData->getName()
+        return new GetTasksQuery(
+            null === $requestData->getStatus()
+                ? null
+                : TaskStatus::fromString($requestData->getStatus()),
+            null === $requestData->getDueDate()
+                ? null
+                : new DateTimeImmutable($requestData->getDueDate())
         );
     }
 }

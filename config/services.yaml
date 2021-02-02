@@ -25,6 +25,8 @@ services:
       - '../src/Core/Business/Domain'
       - '../src/DependencyInjection/'
       - '../src/Kernel.php'
+      - '../src/Task/Business/Domain'
+      - '../src/Task/Presentation/Web/Request'
       - '../src/User/Business/Domain'
       - '../src/User/Presentation/Web/Request'
 

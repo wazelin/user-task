@@ -12,22 +12,22 @@ class TaskSearchRequest implements IdentifiableSearchRequestInterface
 {
     use IdentifiableSearchRequestTrait;
 
-    private ?string            $summary = null;
+    private ?TaskStatus        $status  = null;
     private ?DateTimeInterface $dueDate = null;
 
-    public function hasSummary(): bool
+    public function hasStatus(): bool
     {
-        return null !== $this->summary;
+        return null !== $this->status;
     }
 
-    public function getSummary(): string
+    public function getStatus(): string
     {
-        return $this->summary;
+        return (string)$this->status;
     }
 
-    public function setSummary(string $summary): static
+        public function setStatus(TaskStatus $status): static
     {
-        $this->summary = $summary;
+        $this->status = $status;
 
         return $this;
     }
@@ -37,9 +37,9 @@ class TaskSearchRequest implements IdentifiableSearchRequestInterface
         return null !== $this->dueDate;
     }
 
-    public function getDueDate(): DateTimeInterface
+    public function getDueDate(): string
     {
-        return $this->dueDate;
+        return $this->dueDate->format('Y-m-d');
     }
 
     public function setDueDate(DateTimeInterface $dueDate): static

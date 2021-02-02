@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Wazelin\UserTask\User\Presentation\Web\Request;
+namespace Wazelin\UserTask\Core\Presentation\Web\Request;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class FindUserDto
+class FindByIdDto
 {
     /**
      * @Assert\NotBlank

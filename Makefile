@@ -10,7 +10,7 @@ install:
 spin-up: start wait-for-storage
 
 .PHONY: start
-start: stop install
+start: install
 	docker-compose up -d --build
 
 .PHONY: stop
@@ -18,7 +18,7 @@ stop:
 	docker-compose down --remove-orphans
 
 .PHONY: ci
-ci: start prepare-storage test stop
+ci: stop start prepare-storage test stop
 
 .PHONY: prepare-test
 prepare-test:
@@ -34,4 +34,5 @@ wait-for-storage:
 
 .PHONY: prepare-storage
 prepare-storage: wait-for-storage
-	docker-compose exec php-fpm ./bin/console core:persistence:event-store:create
+	docker-compose exec php-fpm ./bin/console core:persistence:event-store:create \
+		&& docker-compose exec php-fpm ./bin/console core:persistence:read-model:create-indices

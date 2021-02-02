@@ -74,7 +74,7 @@ class UserCest
 
     public function findCreatedUsers(AcceptanceTester $I): void
     {
-        $I->sendGet("users");
+        $I->sendGet('users');
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseContainsJson($this->userDataExamples);
@@ -101,7 +101,7 @@ class UserCest
 
     public function searchUserByInvalidId(AcceptanceTester $I): void
     {
-        $I->sendGet("users/not-an-id");
+        $I->sendGet('users/not-an-id');
 
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }

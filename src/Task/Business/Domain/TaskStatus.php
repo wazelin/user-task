@@ -8,15 +8,15 @@ use InvalidArgumentException;
 
 final class TaskStatus
 {
-    private const OPEN = 'open';
-    private const TODO = 'todo';
-    private const DONE = 'done';
-
-    private const VALUES = [
+    public const VALUES = [
         self::OPEN,
         self::TODO,
         self::DONE,
     ];
+
+    private const OPEN = 'open';
+    private const TODO = 'todo';
+    private const DONE = 'done';
 
     public static function open(): self
     {

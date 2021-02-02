@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Wazelin\UserTask\User\Presentation\Web\RequestHandler;
+namespace Wazelin\UserTask\Task\Presentation\Web\RequestHandler;
 
 use Symfony\Component\HttpFoundation\Request;
 use TypeError;
 use Wazelin\UserTask\Core\Contract\Exception\InvalidRequestException;
 use Wazelin\UserTask\Core\Presentation\Web\Request\FindByIdDto;
 use Wazelin\UserTask\Core\Presentation\Web\RequestHandler\RequestDataValidator;
-use Wazelin\UserTask\User\Business\Query\GetUserQuery;
+use Wazelin\UserTask\Task\Business\Query\GetTaskQuery;
 
-class GetUserRequestHandler
+class GetTaskRequestHandler
 {
     public function __construct(private RequestDataValidator $validator)
     {
@@ -19,11 +19,11 @@ class GetUserRequestHandler
 
     /**
      * @param Request $request
-     * @return GetUserQuery
+     * @return GetTaskQuery
      *
      * @throws InvalidRequestException
      */
-    public function handle(Request $request): GetUserQuery
+    public function handle(Request $request): GetTaskQuery
     {
         try {
             $requestData = new FindByIdDto(
@@ -39,7 +39,7 @@ class GetUserRequestHandler
 
         $this->validator->validate($requestData);
 
-        return new GetUserQuery(
+        return new GetTaskQuery(
             $requestData->getId()
         );
     }
