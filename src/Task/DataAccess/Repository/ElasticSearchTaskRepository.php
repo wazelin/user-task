@@ -11,7 +11,7 @@ use Wazelin\UserTask\Core\Traits\IdentifiableSearchRequestRepositoryTrait;
 use Wazelin\UserTask\Task\Business\Domain\TaskSearchRequest;
 use Wazelin\UserTask\Task\Contract\TaskRepositoryInterface;
 use Wazelin\UserTask\Core\Contract\IndexableRepositoryInterface;
-use Wazelin\UserTask\Task\Business\Domain\ReadModel\Task;
+use Wazelin\UserTask\Task\Business\Domain\TaskProjection;
 
 final class ElasticSearchTaskRepository implements TaskRepositoryInterface, IndexableRepositoryInterface
 {
@@ -26,15 +26,15 @@ final class ElasticSearchTaskRepository implements TaskRepositoryInterface, Inde
         /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->repository = $repositoryFactory->create(
             self::NAME,
-            Task::class,
+            TaskProjection::class,
             [
-                Task::FIELD_STATUS,
-                TASK::FIELD_DUE_DATE,
+                TaskProjection::FIELD_STATUS,
+                TaskProjection::FIELD_DUE_DATE,
             ]
         );
     }
 
-    public function persist(Task $task): void
+    public function persist(TaskProjection $task): void
     {
         $this->repository->save($task);
     }
@@ -50,21 +50,21 @@ final class ElasticSearchTaskRepository implements TaskRepositoryInterface, Inde
         $searchFields = [];
 
         if ($searchRequest->hasId()) {
-            $searchFields[Task::FIELD_ID] = $searchRequest->getId();
+            $searchFields[TaskProjection::FIELD_ID] = $searchRequest->getId();
         }
 
         if ($searchRequest->hasStatus()) {
-            $searchFields[Task::FIELD_STATUS] = $searchRequest->getStatus();
+            $searchFields[TaskProjection::FIELD_STATUS] = $searchRequest->getStatus();
         }
 
         if ($searchRequest->hasDueDate()) {
-            $searchFields[Task::FIELD_DUE_DATE] = $searchRequest->getDueDate();
+            $searchFields[TaskProjection::FIELD_DUE_DATE] = $searchRequest->getDueDate();
         }
 
         return $this->repository->findBy($searchFields);
     }
 
-    public function findOneById(string $id): ?Task
+    public function findOneById(string $id): ?TaskProjection
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository->find($id);

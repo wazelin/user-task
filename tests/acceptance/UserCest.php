@@ -106,6 +106,60 @@ class UserCest
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
 
+    /**
+     * @param AcceptanceTester $I
+     * @param Example $taskExample
+     *
+     * @dataProvider taskDataProvider
+     */
+    public function assignTask(AcceptanceTester $I, Example $taskExample): void
+    {
+        (new TaskCest())
+            ->createTask($I, $taskExample);
+
+        $userData = &$this->userDataExamples[0];
+        $taskData = iterator_to_array($taskExample);
+
+        $taskId = $I->grabIdFromLocationHeader();
+        $userId = $userData['id'];
+
+        $taskData['id'] = $taskId;
+
+        $I->sendPost("users/$userId/tasks", ['id' => $taskId]);
+        $I->seeResponseCodeIs(HttpCode::ACCEPTED);
+
+        $userData['tasks'][] = $taskData;
+
+        $I->sendGet("users/$userId");
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->seeResponseContainsJson($userData);
+    }
+
+    public function reAssignTask(AcceptanceTester $I): void
+    {
+        $firstUserData = reset($this->userDataExamples);
+        $userData      = end($this->userDataExamples);
+
+        $taskData = array_pop($firstUserData['tasks']);
+
+        $taskId      = $taskData['id'];
+        $userId      = $userData['id'];
+        $firstUserId = $firstUserData['id'];
+
+        $I->sendPost("users/$userId/tasks", ['id' => $taskId]);
+        $I->seeResponseCodeIs(HttpCode::ACCEPTED);
+
+        $userData['tasks'] = [$taskData];
+
+        $I->sendGet("users/$userId");
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->seeResponseContainsJson($userData);
+
+        $I->sendGet("users/$firstUserId");
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->seeResponseContainsJson($firstUserData);
+    }
+
     public function tearDownStorage(AcceptanceTester $I): void
     {
         $I->purgeReadModelIndices();
@@ -116,6 +170,17 @@ class UserCest
         return [
             ['name' => 'Alice'],
             ['name' => 'Bob'],
+        ];
+    }
+
+    protected function taskDataProvider(): array
+    {
+        return [
+            [
+                'description' => 'description_1',
+                'summary'     => 'summary_1',
+                'dueDate'     => '2020-01-05',
+            ],
         ];
     }
 

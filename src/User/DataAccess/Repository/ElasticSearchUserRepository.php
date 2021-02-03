@@ -8,7 +8,7 @@ use Broadway\ReadModel\ElasticSearch\ElasticSearchRepository;
 use Broadway\ReadModel\ElasticSearch\ElasticSearchRepositoryFactory;
 use Broadway\ReadModel\Repository;
 use Wazelin\UserTask\Core\Traits\IdentifiableSearchRequestRepositoryTrait;
-use Wazelin\UserTask\User\Business\Domain\ReadModel\User;
+use Wazelin\UserTask\User\Business\Domain\UserProjection;
 use Wazelin\UserTask\User\Business\Domain\UserSearchRequest;
 use Wazelin\UserTask\Core\Contract\IndexableRepositoryInterface;
 use Wazelin\UserTask\User\Contract\UserRepositoryInterface;
@@ -26,14 +26,14 @@ final class ElasticSearchUserRepository implements UserRepositoryInterface, Inde
         /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->repository = $repositoryFactory->create(
             self::NAME,
-            User::class,
+            UserProjection::class,
             [
-                User::FIELD_NAME,
+                UserProjection::FIELD_NAME,
             ]
         );
     }
 
-    public function persist(User $user): void
+    public function persist(UserProjection $user): void
     {
         $this->repository->save($user);
     }
@@ -49,17 +49,17 @@ final class ElasticSearchUserRepository implements UserRepositoryInterface, Inde
         $searchFields = [];
 
         if ($searchRequest->hasId()) {
-            $searchFields[User::FIELD_ID] = $searchRequest->getId();
+            $searchFields[UserProjection::FIELD_ID] = $searchRequest->getId();
         }
 
         if ($searchRequest->hasName()) {
-            $searchFields[User::FIELD_NAME] = $searchRequest->getName();
+            $searchFields[UserProjection::FIELD_NAME] = $searchRequest->getName();
         }
 
         return $this->repository->findBy($searchFields);
     }
 
-    public function findOneById(string $id): ?User
+    public function findOneById(string $id): ?UserProjection
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository->find($id);

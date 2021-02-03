@@ -7,7 +7,7 @@ namespace Wazelin\UserTask\Task\Business\Service;
 use Wazelin\UserTask\Core\Contract\Exception\EntityNotFoundException;
 use Wazelin\UserTask\Task\Business\Contract\TaskSearchQueryInterface;
 use Wazelin\UserTask\Task\Contract\TaskRepositoryInterface;
-use Wazelin\UserTask\Task\Business\Domain\ReadModel\Task;
+use Wazelin\UserTask\Task\Business\Domain\TaskProjection;
 
 class TaskSearchService
 {
@@ -15,12 +15,12 @@ class TaskSearchService
     {
     }
 
-    public function findOneOrFail(TaskSearchQueryInterface $query): Task
+    public function findOneOrFail(TaskSearchQueryInterface $query): TaskProjection
     {
         $tasks = $this->find($query);
 
         if (!$tasks) {
-            throw EntityNotFoundException::create(Task::class);
+            throw EntityNotFoundException::create(TaskProjection::class);
         }
 
         return reset($tasks);
@@ -28,7 +28,7 @@ class TaskSearchService
 
     /***
      * @param TaskSearchQueryInterface $query
-     * @return Task[]
+     * @return TaskProjection[]
      */
     public function find(TaskSearchQueryInterface $query): array
     {

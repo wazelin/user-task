@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\Task\Contract;
 
 use Wazelin\UserTask\Task\Business\Domain\TaskSearchRequest;
-use Wazelin\UserTask\Task\Business\Domain\ReadModel\Task;
+use Wazelin\UserTask\Task\Business\Domain\TaskProjection;
 
 interface TaskRepositoryInterface
 {
-    public function persist(Task $task);
+    public function persist(TaskProjection $task);
 
     /**
      * @param TaskSearchRequest $searchRequest
-     * @return Task[]
+     * @return TaskProjection[]
      */
     public function find(TaskSearchRequest $searchRequest): array;
 
-    public function findOneById(string $id): ?Task;
+    public function findOneById(string $id): ?TaskProjection;
 }

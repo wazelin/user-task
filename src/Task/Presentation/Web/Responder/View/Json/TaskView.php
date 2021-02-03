@@ -5,26 +5,24 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\Task\Presentation\Web\Responder\View\Json;
 
 use JsonSerializable;
-use Wazelin\UserTask\Task\Business\Domain\ReadModel\Task;
-use Wazelin\UserTask\User\Presentation\Web\Responder\View\Json\UserView;
+use Wazelin\UserTask\Task\Business\Domain\TaskProjection;
+use Wazelin\UserTask\User\Presentation\Web\Responder\View\Json\PureUserView;
 
 class TaskView implements JsonSerializable
 {
-    public function __construct(private Task $task)
+    public function __construct(private TaskProjection $task)
     {
     }
 
     public function jsonSerialize(): array
     {
-        return [
-            'id'          => $this->task->getId(),
-            'assignee'    => null === $this->task->getAssignee()
-                ? null
-                : new UserView($this->task->getAssignee()),
-            'status'      => (string)$this->task->getStatus(),
-            'summary'     => $this->task->getSummary(),
-            'description' => $this->task->getDescription(),
-            'dueDate'     => $this->task->getDueDate()?->format('Y-m-d'),
-        ];
+        return array_replace(
+            (new PureTaskView($this->task))->jsonSerialize(),
+            [
+                'assignee' => null === $this->task->getAssignee()
+                    ? null
+                    : new PureUserView($this->task->getAssignee()),
+            ]
+        );
     }
 }

@@ -16,7 +16,7 @@ use Wazelin\UserTask\Core\Business\Domain\Id;
 use Wazelin\UserTask\User\Business\Domain\Event\UserWasCreatedEvent;
 use Wazelin\UserTask\User\Business\Command\CreateUserCommand;
 use Wazelin\UserTask\User\Business\Command\CreateUserCommandHandler;
-use Wazelin\UserTask\User\Business\Domain\ReadModel\User;
+use Wazelin\UserTask\User\Business\Domain\User;
 
 class CreateUserCommandHandlerTest extends CommandHandlerScenarioTestCase
 {

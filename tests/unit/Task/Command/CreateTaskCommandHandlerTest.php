@@ -19,7 +19,6 @@ use Wazelin\UserTask\Task\Business\Command\CreateTaskCommand;
 use Wazelin\UserTask\Task\Business\Command\CreateTaskCommandHandler;
 use Wazelin\UserTask\Task\Business\Domain\Task;
 use Wazelin\UserTask\Task\Business\Domain\Event\TaskWasCreatedEvent;
-use Wazelin\UserTask\Task\Business\Domain\TaskStatus;
 
 class CreateTaskCommandHandlerTest extends CommandHandlerScenarioTestCase
 {
@@ -47,7 +46,7 @@ class CreateTaskCommandHandlerTest extends CommandHandlerScenarioTestCase
         $this->scenario
             ->withAggregateId($id)
             ->when(new CreateTaskCommand(new Id($id), $summary, $description, $dueDate))
-            ->then([new TaskWasCreatedEvent(new Id($id), TaskStatus::open(), $summary, $description, $dueDate)]);
+            ->then([new TaskWasCreatedEvent(new Id($id), $summary, $description, $dueDate)]);
     }
 
     public function dataProvider(): array

@@ -6,7 +6,7 @@ namespace Wazelin\UserTask\User\Presentation\Web\Responder;
 
 use Symfony\Component\HttpFoundation\Response;
 use Wazelin\UserTask\Core\Presentation\Web\Responder\JsonResponder;
-use Wazelin\UserTask\User\Business\Domain\ReadModel\User;
+use Wazelin\UserTask\User\Business\Domain\UserProjection;
 use Wazelin\UserTask\User\Presentation\Web\Responder\View\Json\UsersView;
 
 final class GetUsersResponder
@@ -15,7 +15,7 @@ final class GetUsersResponder
     {
     }
 
-    public function respond(User ...$users): Response
+    public function respond(UserProjection ...$users): Response
     {
         return $this->responder->respond(
             new UsersView(...$users)

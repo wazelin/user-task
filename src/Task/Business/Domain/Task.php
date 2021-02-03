@@ -27,7 +27,7 @@ final class Task extends EventSourcedAggregateRoot
         $task = new self();
 
         $task->apply(
-            new TaskWasCreatedEvent($id, TaskStatus::open(), $summary, $description, $dueDate)
+            new TaskWasCreatedEvent($id, $summary, $description, $dueDate)
         );
 
         return $task;
@@ -65,55 +65,44 @@ final class Task extends EventSourcedAggregateRoot
 
     public function assignToUser(User $user): self
     {
-        $this->apply(
-            new UserWasAssignedToTaskEvent(
-                $this->getId(),
-                $user->getId()
-            )
-        );
+        if ((string)$user->getId() === (string)$this->assignee)
+        {
+            return $this;
+        }
 
-        return $this;
-    }
+        $this->unassign();
 
-    public function applyTaskWasCreatedEvent(TaskWasCreatedEvent $event): self
-    {
-        $this->id          = $event->getId();
-        $this->status      = $event->getStatus();
-        $this->summary     = $event->getSummary();
-        $this->description = $event->getDescription();
-        $this->dueDate     = $event->getDueDate();
-
-        return $this;
-    }
-
-    public function applyUserWasAssignedToTaskEvent(UserWasAssignedToTaskEvent $event): self
-    {
-        if (null !== $this->assignee) {
+        if ($this->status->equals(TaskStatus::open())) {
             $this->apply(
-                new UserWasUnassignedFromTaskEvent(
-                    $this->getId(),
-                    $this->assignee
+                new TaskStatusWasChangedEvent(
+                    $this->id,
+                    TaskStatus::todo()
                 )
             );
         }
 
         $this->apply(
-            new TaskStatusWasChangedEvent(
-                $this->getId(),
-                TaskStatus::todo()
+            new UserWasAssignedToTaskEvent(
+                $user->getId(),
+                $this->id
             )
         );
-
-        $this->assignee = $event->getUserId();
 
         return $this;
     }
 
-    public function applyUserWasUnassignedFromTaskEvent(UserWasUnassignedFromTaskEvent $event): self
+    public function unassign(): self
     {
-        if ((string)$this->assignee === (string)$event->getUserId()) {
-            $this->assignee = null;
+        if (null === $this->assignee) {
+            return $this;
         }
+
+        $this->apply(
+            new UserWasUnassignedFromTaskEvent(
+                $this->assignee,
+                $this->id
+            )
+        );
 
         $this->apply(
             new TaskStatusWasChangedEvent(
@@ -125,10 +114,29 @@ final class Task extends EventSourcedAggregateRoot
         return $this;
     }
 
-    public function applyTaskStatusWasChangedEvent(TaskStatusWasChangedEvent $event): self
+    public function applyTaskWasCreatedEvent(TaskWasCreatedEvent $event): void
+    {
+        $this->id          = $event->getId();
+        $this->status      = $event->getStatus();
+        $this->summary     = $event->getSummary();
+        $this->description = $event->getDescription();
+        $this->dueDate     = $event->getDueDate();
+    }
+
+    public function applyUserWasAssignedToTaskEvent(UserWasAssignedToTaskEvent $event): void
+    {
+        $this->assignee = $event->getUserId();
+    }
+
+    public function applyUserWasUnassignedFromTaskEvent(UserWasUnassignedFromTaskEvent $event): void
+    {
+        if ((string)$this->assignee === (string)$event->getUserId()) {
+            $this->assignee = null;
+        }
+    }
+
+    public function applyTaskStatusWasChangedEvent(TaskStatusWasChangedEvent $event): void
     {
         $this->status = $event->getStatus();
-
-        return $this;
     }
 }

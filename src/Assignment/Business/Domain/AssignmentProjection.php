@@ -2,30 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Wazelin\UserTask\Task\Business\Domain\Event;
+namespace Wazelin\UserTask\Assignment\Business\Domain;
 
 use DateTimeInterface;
-use Wazelin\UserTask\Core\Business\Domain\Id;
+use Wazelin\UserTask\Task\Business\Domain\TaskProjectionInterface;
 use Wazelin\UserTask\Task\Business\Domain\TaskStatus;
 
-class TaskWasCreatedEvent
+final class AssignmentProjection implements TaskProjectionInterface
 {
     public function __construct(
-        private Id $id,
+        private string $id,
+        private TaskStatus $status,
         private string $summary,
         private string $description,
         private ?DateTimeInterface $dueDate
     ) {
     }
 
-    public function getId(): Id
+    public function getId(): string
     {
         return $this->id;
     }
 
     public function getStatus(): TaskStatus
     {
-        return TaskStatus::open();
+        return $this->status;
     }
 
     public function getSummary(): string

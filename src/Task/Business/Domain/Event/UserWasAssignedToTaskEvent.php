@@ -8,17 +8,17 @@ use Wazelin\UserTask\Core\Business\Domain\Id;
 
 class UserWasAssignedToTaskEvent
 {
-    public function __construct(private Id $taskId, private Id $userId)
+    public function __construct(private Id $userId, private Id $taskId)
     {
-    }
-
-    public function getTaskId(): Id
-    {
-        return $this->taskId;
     }
 
     public function getUserId(): Id
     {
         return $this->userId;
+    }
+
+    public function getTaskId(): Id
+    {
+        return $this->taskId;
     }
 }

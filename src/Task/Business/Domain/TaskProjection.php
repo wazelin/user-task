@@ -2,20 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Wazelin\UserTask\Task\Business\Domain\ReadModel;
+namespace Wazelin\UserTask\Task\Business\Domain;
 
-use Broadway\ReadModel\Identifiable;
 use DateTimeInterface;
-use Wazelin\UserTask\Task\Business\Domain\TaskStatus;
-use Wazelin\UserTask\User\Business\Domain\ReadModel\User;
+use Wazelin\UserTask\Assignment\Business\Domain\AssigneeProjection;
 
-final class Task implements Identifiable
+final class TaskProjection implements TaskProjectionInterface
 {
     public const FIELD_ID       = 'id';
     public const FIELD_STATUS   = 'status';
     public const FIELD_DUE_DATE = 'dueDate';
 
-    private ?User $assignee = null;
+    private ?AssigneeProjection $assignee = null;
 
     public function __construct(
         private string $id,
@@ -58,12 +56,12 @@ final class Task implements Identifiable
         return $this->dueDate;
     }
 
-    public function getAssignee(): ?User
+    public function getAssignee(): ?AssigneeProjection
     {
         return $this->assignee;
     }
 
-    public function setAssignee(?User $assignee): self
+    public function setAssignee(?AssigneeProjection $assignee): self
     {
         $this->assignee = $assignee;
 

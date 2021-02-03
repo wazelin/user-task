@@ -8,7 +8,7 @@ use Broadway\ReadModel\Projector;
 use Wazelin\UserTask\Task\Business\Domain\Event\TaskStatusWasChangedEvent;
 use Wazelin\UserTask\Task\Business\Domain\Event\TaskWasCreatedEvent;
 use Wazelin\UserTask\Task\Contract\TaskRepositoryInterface;
-use Wazelin\UserTask\Task\Business\Domain\ReadModel\Task;
+use Wazelin\UserTask\Task\Business\Domain\TaskProjection;
 
 class TaskProjector extends Projector
 {
@@ -19,7 +19,7 @@ class TaskProjector extends Projector
     protected function applyTaskWasCreatedEvent(TaskWasCreatedEvent $event): void
     {
         $this->repository->persist(
-            new Task(
+            new TaskProjection(
                 (string)$event->getId(),
                 $event->getStatus(),
                 $event->getSummary(),

@@ -39,11 +39,9 @@ final class User extends EventSourcedAggregateRoot
         return $this->name;
     }
 
-    public function applyUserWasCreatedEvent(UserWasCreatedEvent $event): self
+    public function applyUserWasCreatedEvent(UserWasCreatedEvent $event): void
     {
         $this->id   = $event->getId();
         $this->name = $event->getName();
-
-        return $this;
     }
 }

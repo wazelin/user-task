@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\User\Presentation\Web\Responder\View\Json;
 
 use JsonSerializable;
-use Wazelin\UserTask\User\Business\Domain\ReadModel\User;
+use Wazelin\UserTask\User\Business\Domain\UserProjection;
 
 class UsersView implements JsonSerializable
 {
     private array $users;
 
-    public function __construct(User ...$users)
+    public function __construct(UserProjection ...$users)
     {
         $this->users = $users;
     }
@@ -19,7 +19,7 @@ class UsersView implements JsonSerializable
     public function jsonSerialize()
     {
         return array_map(
-            static fn(User $user): UserView => new UserView($user),
+            static fn(UserProjection $user): UserView => new UserView($user),
             $this->users
         );
     }
