@@ -24,6 +24,11 @@ $ make stop
 $ make ci
 ```
 
+# Replaying the events
+```shell
+$ make replay-events
+```
+
 # Out of scope
 - Authentication
 - Authorization

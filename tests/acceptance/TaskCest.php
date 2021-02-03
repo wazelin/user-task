@@ -18,6 +18,8 @@ class TaskCest
     public function setUpStorage(AcceptanceTester $I): void
     {
         $I->purgeReadModelIndices();
+        $I->dropEventStore();
+        $I->createEventStore();
     }
 
     public function findNoTasks(AcceptanceTester $I): void
@@ -122,9 +124,18 @@ class TaskCest
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
 
-    public function tearDownStorage(AcceptanceTester $I): void
+    public function replayEvents(AcceptanceTester $I): void
     {
         $I->purgeReadModelIndices();
+        $this->findNoTasks($I);
+
+        $I->replayEvents();
+        $this->findCreatedTasks($I);
+    }
+
+    public function tearDownStorage(AcceptanceTester $I): void
+    {
+        $this->setUpStorage($I);
     }
 
     protected function taskDataProvider(): array

@@ -25,7 +25,9 @@ use Codeception\Lib\Friend;
 class AcceptanceTester extends Actor
 {
     use _generated\AcceptanceTesterActions;
-    use PurgeReadModelIndicesTrait;
+    use EventStoreSchemaTrait;
+    use PurgeProjectionIndicesTrait;
+    use ReplayEventsTrait;
 
     public function grabIdFromLocationHeader(): string
     {

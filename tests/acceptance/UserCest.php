@@ -17,6 +17,8 @@ class UserCest
     public function setUpStorage(AcceptanceTester $I): void
     {
         $I->purgeReadModelIndices();
+        $I->dropEventStore();
+        $I->createEventStore();
     }
 
     public function findNoUsers(AcceptanceTester $I): void
@@ -135,10 +137,10 @@ class UserCest
         $I->seeResponseContainsJson($userData);
     }
 
-    public function reAssignTask(AcceptanceTester $I): void
+    public function reassignTask(AcceptanceTester $I): void
     {
-        $firstUserData = reset($this->userDataExamples);
-        $userData      = end($this->userDataExamples);
+        $firstUserData = &$this->userDataExamples[0];
+        $userData      = &$this->userDataExamples[1];
 
         $taskData = array_pop($firstUserData['tasks']);
 
@@ -160,9 +162,18 @@ class UserCest
         $I->seeResponseContainsJson($firstUserData);
     }
 
-    public function tearDownStorage(AcceptanceTester $I): void
+    public function replayEvents(AcceptanceTester $I): void
     {
         $I->purgeReadModelIndices();
+        $this->findNoUsers($I);
+
+        $I->replayEvents();
+        $this->findCreatedUsers($I);
+    }
+
+    public function tearDownStorage(AcceptanceTester $I): void
+    {
+        $this->setUpStorage($I);
     }
 
     protected function userDataProvider(): array

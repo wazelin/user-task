@@ -68,6 +68,11 @@ services:
       - '@read_model.user_repository'
       - '@read_model.task_repository'
 
+  Wazelin\UserTask\Core\Presentation\Cli\Command\ReplayEventsCommand:
+    class: Wazelin\UserTask\Core\Presentation\Cli\Command\ReplayEventsCommand
+    arguments:
+      $eventListeners: !tagged broadway.domain.event_listener
+
   Broadway\EventSourcing\EventSourcingRepository $userRepository:
     class: Broadway\EventSourcing\EventSourcingRepository
     arguments:

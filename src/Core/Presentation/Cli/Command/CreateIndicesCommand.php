@@ -24,8 +24,8 @@ class CreateIndicesCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('core:persistence:read-model:create-indices')
-            ->setDescription('Creates the read model indices.')
+            ->setName('core:persistence:projection:create-indices')
+            ->setDescription('Creates the projection indices.')
             ->setHelp(
                 <<<HELP
                     The <info>%command.name%</info> command creates the indices in the read model repositories:

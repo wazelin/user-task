@@ -13,3 +13,4 @@ services:
       - "@broadway.uuid.converter"
 
   Broadway\EventStore\EventStore: "@broadway.event_store.dbal"
+  Broadway\EventStore\Management\EventStoreManagement: "@broadway.event_store.dbal"

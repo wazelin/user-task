@@ -33,5 +33,8 @@ wait-for-storage:
 .PHONY: prepare-storage
 prepare-storage: wait-for-storage
 	docker-compose exec php-fpm ./bin/console core:persistence:event-store:create \
-		&& docker-compose exec php-fpm ./bin/console core:persistence:read-model:create-indices
+		&& docker-compose exec php-fpm ./bin/console core:persistence:projection:create-indices
 
+.PHONY: replay-events
+replay-events: wait-for-storage
+	docker-compose exec php-fpm ./bin/console core:persistence:event-store:replay
