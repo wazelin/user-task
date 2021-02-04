@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Wazelin\UserTask\Core\DataAccess\Command\CommandDispatcher;
+use Wazelin\UserTask\Core\Presentation\Web\Responder\CreateResourceResponder;
 use Wazelin\UserTask\User\Presentation\Web\RequestHandler\AssignTaskRequestHandler;
-use Wazelin\UserTask\User\Presentation\Web\Responder\AssignUserTaskResponder;
 
 /**
  * @Route("{id}/tasks", methods={"POST"})
@@ -19,7 +19,7 @@ class AssignUserTaskAction
     public function __construct(
         private AssignTaskRequestHandler $requestHandler,
         private CommandDispatcher $commandDispatcher,
-        private AssignUserTaskResponder $responder
+        private CreateResourceResponder $responder
     ) {
     }
 
@@ -29,6 +29,9 @@ class AssignUserTaskAction
 
         $this->commandDispatcher->dispatch($command);
 
-        return $this->responder->respond();
+        return $this->responder->respond(
+            $request->getUri(),
+            $command->getTaskId()
+        );
     }
 }

@@ -162,6 +162,22 @@ class UserCest
         $I->seeResponseContainsJson($firstUserData);
     }
 
+    public function unassignTask(AcceptanceTester $I): void
+    {
+        $userData = &$this->userDataExamples[1];
+        $taskData = array_pop($userData['tasks']);
+
+        $taskId = $taskData['id'];
+        $userId = $userData['id'];
+
+        $I->sendDelete("users/$userId/tasks/$taskId");
+        $I->seeResponseCodeIs(HttpCode::ACCEPTED);
+
+        $I->sendGet("users/$userId");
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->seeResponseContainsJson($userData);
+    }
+
     public function replayEvents(AcceptanceTester $I): void
     {
         $I->purgeReadModelIndices();

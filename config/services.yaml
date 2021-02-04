@@ -89,6 +89,9 @@ services:
   Wazelin\UserTask\Assignment\Business\Command\AssignCommandHandler:
     tags: [ 'broadway.command_handler' ]
 
+  Wazelin\UserTask\Assignment\Business\Command\UnassignCommandHandler:
+    tags: [ 'broadway.command_handler' ]
+
   Wazelin\UserTask\Task\Business\Command\CreateTaskCommandHandler:
     tags: [ 'broadway.command_handler' ]
 

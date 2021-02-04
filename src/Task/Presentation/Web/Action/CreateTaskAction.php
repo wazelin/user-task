@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Wazelin\UserTask\Core\DataAccess\Command\CommandDispatcher;
+use Wazelin\UserTask\Core\Presentation\Web\Responder\CreateResourceResponder;
 use Wazelin\UserTask\Task\Presentation\Web\RequestHandler\CreateTaskRequestHandler;
-use Wazelin\UserTask\Task\Presentation\Web\Responder\CreateTaskResponder;
 
 /**
  * @Route(methods={"POST"})
@@ -19,7 +19,7 @@ class CreateTaskAction
     public function __construct(
         private CreateTaskRequestHandler $requestHandler,
         private CommandDispatcher $commandDispatcher,
-        private CreateTaskResponder $responder
+        private CreateResourceResponder $responder
     ) {
     }
 
