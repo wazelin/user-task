@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\Assignment\Business\Command;
 
 use Broadway\EventSourcing\EventSourcingRepository;
-use Wazelin\UserTask\Core\Command\AbstractCommandHandler;
+use Wazelin\UserTask\Core\Business\Command\AbstractCommandHandler;
 use Wazelin\UserTask\Task\Business\Domain\Task;
 use Wazelin\UserTask\User\Business\Domain\User;
 

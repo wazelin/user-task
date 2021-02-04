@@ -12,8 +12,9 @@ class TaskSearchRequest implements IdentifiableSearchRequestInterface
 {
     use IdentifiableSearchRequestTrait;
 
-    private ?TaskStatus        $status  = null;
-    private ?DateTimeInterface $dueDate = null;
+    private ?TaskStatus        $status   = null;
+    private ?DateTimeInterface $dueDate    = null;
+    private ?string            $assigneeId = null;
 
     public function hasStatus(): bool
     {
@@ -25,7 +26,7 @@ class TaskSearchRequest implements IdentifiableSearchRequestInterface
         return (string)$this->status;
     }
 
-        public function setStatus(TaskStatus $status): static
+    public function setStatus(TaskStatus $status): static
     {
         $this->status = $status;
 
@@ -45,6 +46,23 @@ class TaskSearchRequest implements IdentifiableSearchRequestInterface
     public function setDueDate(DateTimeInterface $dueDate): static
     {
         $this->dueDate = $dueDate;
+
+        return $this;
+    }
+
+    public function hasAssigneeId(): bool
+    {
+        return null !== $this->assigneeId;
+    }
+
+    public function getAssigneeId(): string
+    {
+        return $this->assigneeId;
+    }
+
+    public function setAssigneeId(string $assigneeId): static
+    {
+        $this->assigneeId = $assigneeId;
 
         return $this;
     }

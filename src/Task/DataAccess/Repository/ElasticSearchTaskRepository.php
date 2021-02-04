@@ -8,6 +8,7 @@ use Broadway\ReadModel\ElasticSearch\ElasticSearchRepository;
 use Broadway\ReadModel\ElasticSearch\ElasticSearchRepositoryFactory;
 use Broadway\ReadModel\Repository;
 use Wazelin\UserTask\Core\Traits\IdentifiableSearchRequestRepositoryTrait;
+use Wazelin\UserTask\Task\Business\Domain\TaskCollectionProjection;
 use Wazelin\UserTask\Task\Business\Domain\TaskSearchRequest;
 use Wazelin\UserTask\Task\Contract\TaskRepositoryInterface;
 use Wazelin\UserTask\Core\Contract\IndexableRepositoryInterface;
@@ -30,6 +31,7 @@ final class ElasticSearchTaskRepository implements TaskRepositoryInterface, Inde
             [
                 TaskProjection::FIELD_STATUS,
                 TaskProjection::FIELD_DUE_DATE,
+                TaskProjection::FIELD_ASSIGNEE_ID,
             ]
         );
     }
@@ -39,12 +41,12 @@ final class ElasticSearchTaskRepository implements TaskRepositoryInterface, Inde
         $this->repository->save($task);
     }
 
-    public function find(TaskSearchRequest $searchRequest): array
+    public function find(TaskSearchRequest $searchRequest): TaskCollectionProjection
     {
         $identifiableSearchResult = $this->findByIdentifier($searchRequest);
 
         if (null !== $identifiableSearchResult) {
-            return $identifiableSearchResult;
+            return new TaskCollectionProjection(...$identifiableSearchResult);
         }
 
         $searchFields = [];
@@ -61,7 +63,13 @@ final class ElasticSearchTaskRepository implements TaskRepositoryInterface, Inde
             $searchFields[TaskProjection::FIELD_DUE_DATE] = $searchRequest->getDueDate();
         }
 
-        return $this->repository->findBy($searchFields);
+        if ($searchRequest->hasAssigneeId()) {
+            $searchFields[TaskProjection::FIELD_ASSIGNEE_ID] = $searchRequest->getAssigneeId();
+        }
+
+        return new TaskCollectionProjection(
+            ...$this->repository->findBy($searchFields)
+        );
     }
 
     public function findOneById(string $id): ?TaskProjection

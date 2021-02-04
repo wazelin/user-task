@@ -8,38 +8,35 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Wazelin\UserTask\Core\Contract\Exception\EntityNotFoundException;
-use Wazelin\UserTask\User\Business\Service\UserSearchService;
-use Wazelin\UserTask\User\Presentation\Web\RequestHandler\GetUserRequestHandler;
+use Wazelin\UserTask\Task\Contract\TaskSearchServiceInterface;
+use Wazelin\UserTask\Task\Presentation\Web\RequestHandler\GetTaskRequestHandler;
 use Wazelin\UserTask\User\Presentation\Web\Responder\GetUserTaskResponder;
 
 /**
- * @Route("{id}/tasks/{taskId}", methods={"GET"})
+ * @Route("{userId}/tasks/{id}", methods={"GET"})
  */
 class GetUserTaskAction
 {
     public function __construct(
-        private GetUserRequestHandler $requestHandler,
-        private UserSearchService $service,
+        private GetTaskRequestHandler $requestHandler,
+        private TaskSearchServiceInterface $service,
         private GetUserTaskResponder $responder,
     ) {
     }
 
     public function __invoke(Request $request): Response
     {
-        $tasks = $this->service->findOneOrFail(
+        $task = $this->service->findOneOrFail(
             $this->requestHandler->handle($request)
-        )
-            ->getTasks();
+        );
 
 
-        $taskId = $request->attributes->get('taskId');
+        $userId = $request->attributes->get('userId');
 
-        if (!isset($tasks[$taskId])) {
+        if ($task->getAssigneeId() !== $userId) {
             throw EntityNotFoundException::create('User task');
         }
 
-        return $this->responder->respond(
-            $tasks[$taskId]
-        );
+        return $this->responder->respond($task);
     }
 }

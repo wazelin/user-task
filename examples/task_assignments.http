@@ -1,9 +1,9 @@
-POST http://localhost/api/v1/users/a96fd710-dd2a-4a9d-81d5-dd819a56cf15/tasks
+POST http://localhost/api/v1/users/f7056592-acec-4ba5-aa5f-0f7c6ea32dd4/tasks
 Accept: application/json
 Content-Type: application/json
 
 {
-  "id": "c727e2e9-d3ef-40c5-8955-37a6ef277d2a"
+  "id": "a1555657-8575-46c4-bb17-2e7856b6bd4d"
 }
 
 > {%
@@ -14,7 +14,7 @@ client.test("Request executed successfully", function() {
 
 ###
 
-DELETE http://localhost/api/v1/users/a96fd710-dd2a-4a9d-81d5-dd819a56cf15/tasks/c727e2e9-d3ef-40c5-8955-37a6ef277d2a
+DELETE http://localhost/api/v1/users/b1c3d328-53d3-45b3-962a-8627381181d0/tasks/6ced720c-ea96-4161-90c4-4b4be328b65c
 Accept: application/json
 
 > {%

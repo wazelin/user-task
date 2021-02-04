@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\Task\Business\Command;
 
 use Broadway\EventSourcing\EventSourcingRepository;
-use Wazelin\UserTask\Core\Command\AbstractCommandHandler;
+use Wazelin\UserTask\Core\Business\Command\AbstractCommandHandler;
 use Wazelin\UserTask\Task\Business\Domain\Task;
 
 class CreateTaskCommandHandler extends AbstractCommandHandler

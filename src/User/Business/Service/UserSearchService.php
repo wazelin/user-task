@@ -6,6 +6,7 @@ namespace Wazelin\UserTask\User\Business\Service;
 
 use Wazelin\UserTask\Core\Contract\Exception\EntityNotFoundException;
 use Wazelin\UserTask\User\Business\Contract\UserSearchQueryInterface;
+use Wazelin\UserTask\User\Business\Domain\UserCollectionProjection;
 use Wazelin\UserTask\User\Business\Domain\UserProjection;
 use Wazelin\UserTask\User\Contract\UserRepositoryInterface;
 
@@ -17,20 +18,14 @@ class UserSearchService
 
     public function findOneOrFail(UserSearchQueryInterface $query): UserProjection
     {
-        $users = $this->find($query);
-
-        if (!$users) {
-            throw EntityNotFoundException::create(UserProjection::class);
+        foreach ($this->find($query) as $user) {
+            return $user;
         }
 
-        return reset($users);
+        throw EntityNotFoundException::create(UserProjection::class);
     }
 
-    /***
-     * @param UserSearchQueryInterface $query
-     * @return UserProjection[]
-     */
-    public function find(UserSearchQueryInterface $query): array
+    public function find(UserSearchQueryInterface $query): UserCollectionProjection
     {
         return $this->repository->find(
             $query->getSearchRequest()

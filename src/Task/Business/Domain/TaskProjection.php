@@ -9,9 +9,10 @@ use Wazelin\UserTask\Assignment\Business\Domain\AssigneeProjection;
 
 final class TaskProjection implements TaskProjectionInterface
 {
-    public const FIELD_ID       = 'id';
-    public const FIELD_STATUS   = 'status';
-    public const FIELD_DUE_DATE = 'dueDate';
+    public const FIELD_ID          = 'id';
+    public const FIELD_STATUS      = 'status';
+    public const FIELD_DUE_DATE    = 'dueDate';
+    public const FIELD_ASSIGNEE_ID = 'assigneeId';
 
     private ?AssigneeProjection $assignee = null;
 
@@ -66,5 +67,10 @@ final class TaskProjection implements TaskProjectionInterface
         $this->assignee = $assignee;
 
         return $this;
+    }
+
+    public function getAssigneeId(): ?string
+    {
+        return $this->assignee?->getId();
     }
 }

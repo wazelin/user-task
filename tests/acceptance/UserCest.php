@@ -137,6 +137,48 @@ class UserCest
         $I->seeResponseContainsJson($userData);
     }
 
+    public function listAssignments(AcceptanceTester $I): void
+    {
+        $userData = $this->userDataExamples[0];
+
+        $userId = $userData['id'];
+        $tasks  = $userData['tasks'];
+
+        $I->sendGet("users/$userId/tasks");
+        $I->seeResponseCodeIs(HttpCode::OK);
+
+        $I->seeResponseContainsJson($tasks);
+    }
+
+    public function filterAssignments(AcceptanceTester $I): void
+    {
+        $userData = $this->userDataExamples[0];
+
+        $userId  = $userData['id'];
+        $task    = $userData['tasks'][0];
+        $dueDate = $task['dueDate'];
+
+        $I->sendGet("users/$userId/tasks?dueDate=$dueDate");
+        $I->seeResponseCodeIs(HttpCode::OK);
+
+        $I->seeResponseContainsJson([$task]);
+    }
+
+    public function getAssignment(AcceptanceTester $I): void
+    {
+        $userData = $this->userDataExamples[0];
+
+        $userId = $userData['id'];
+        $tasks  = $userData['tasks'];
+
+        foreach ($tasks as $task) {
+            $I->sendGet("users/$userId/tasks/{$task['id']}");
+            $I->seeResponseCodeIs(HttpCode::OK);
+
+            $I->seeResponseContainsJson($task);
+        }
+    }
+
     public function reassignTask(AcceptanceTester $I): void
     {
         $firstUserData = &$this->userDataExamples[0];
@@ -207,6 +249,10 @@ class UserCest
                 'description' => 'description_1',
                 'summary'     => 'summary_1',
                 'dueDate'     => '2020-01-05',
+            ],
+            [
+                'description' => 'description_1',
+                'summary'     => 'summary_1',
             ],
         ];
     }

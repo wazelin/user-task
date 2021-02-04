@@ -8,6 +8,7 @@ use Broadway\ReadModel\ElasticSearch\ElasticSearchRepository;
 use Broadway\ReadModel\ElasticSearch\ElasticSearchRepositoryFactory;
 use Broadway\ReadModel\Repository;
 use Wazelin\UserTask\Core\Traits\IdentifiableSearchRequestRepositoryTrait;
+use Wazelin\UserTask\User\Business\Domain\UserCollectionProjection;
 use Wazelin\UserTask\User\Business\Domain\UserProjection;
 use Wazelin\UserTask\User\Business\Domain\UserSearchRequest;
 use Wazelin\UserTask\Core\Contract\IndexableRepositoryInterface;
@@ -38,12 +39,12 @@ final class ElasticSearchUserRepository implements UserRepositoryInterface, Inde
         $this->repository->save($user);
     }
 
-    public function find(UserSearchRequest $searchRequest): array
+    public function find(UserSearchRequest $searchRequest): UserCollectionProjection
     {
         $identifiableSearchResult = $this->findByIdentifier($searchRequest);
 
         if (null !== $identifiableSearchResult) {
-            return $identifiableSearchResult;
+            return new UserCollectionProjection(...$identifiableSearchResult);
         }
 
         $searchFields = [];
@@ -56,7 +57,9 @@ final class ElasticSearchUserRepository implements UserRepositoryInterface, Inde
             $searchFields[UserProjection::FIELD_NAME] = $searchRequest->getName();
         }
 
-        return $this->repository->findBy($searchFields);
+        return new UserCollectionProjection(
+            ...$this->repository->findBy($searchFields)
+        );
     }
 
     public function findOneById(string $id): ?UserProjection

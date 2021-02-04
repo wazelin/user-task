@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wazelin\UserTask\Core\Command;
+namespace Wazelin\UserTask\Core\Business\Command;
 
 use Broadway\CommandHandling\CommandHandler;
 

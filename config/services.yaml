@@ -22,14 +22,16 @@ services:
   Wazelin\UserTask\:
     resource: '../src/'
     exclude:
+      - '../src/Assignment/Business/Query'
       - '../src/Core/Business/Domain'
+      - '../src/Core/Presentation/Web/Request'
       - '../src/DependencyInjection/'
       - '../src/Kernel.php'
       - '../src/Task/Business/Domain'
-      - '../src/Task/DataAccess/ReadModel'
+      - '../src/Task/Business/Query'
       - '../src/Task/Presentation/Web/Request'
       - '../src/User/Business/Domain'
-      - '../src/User/DataAccess/ReadModel'
+      - '../src/User/Business/Query'
       - '../src/User/Presentation/Web/Request'
 
   # controllers are imported separately to make sure services can be injected
@@ -51,6 +53,9 @@ services:
     tags: [ serializer.normalizer ]
 
   Wazelin\UserTask\Core\Presentation\Serializer\Normalizer\StringableObjectNormalizer:
+    tags: [ serializer.normalizer ]
+
+  Wazelin\UserTask\Core\Presentation\Serializer\Normalizer\IteratorObjectNormalizer:
     tags: [ serializer.normalizer ]
 
   read_model.user_repository.elastic_search:
