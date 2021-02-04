@@ -1,0 +1,13 @@
+PATCH http://localhost/api/v1/tasks/a516d92c-843e-4223-834f-f118bae7b099
+Host: user-task.docker
+Accept: application/json
+
+{
+  "status": "done"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}

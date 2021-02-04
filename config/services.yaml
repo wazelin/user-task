@@ -95,6 +95,9 @@ services:
   Wazelin\UserTask\Task\Business\Command\CreateTaskCommandHandler:
     tags: [ 'broadway.command_handler' ]
 
+  Wazelin\UserTask\Task\Business\Command\ChangeTaskStatusCommandHandler:
+    tags: [ 'broadway.command_handler' ]
+
   Wazelin\UserTask\Assignment\Business\Projector\AssignmentProjector:
     tags: [ 'broadway.domain.event_listener' ]
 

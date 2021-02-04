@@ -63,6 +63,18 @@ final class Task extends EventSourcedAggregateRoot
         return $this->dueDate;
     }
 
+    public function changeStatus(TaskStatus $status): self
+    {
+        $this->apply(
+            new TaskStatusWasChangedEvent(
+                $this->id,
+                $status
+            )
+        );
+
+        return $this;
+    }
+
     public function assignToUser(User $user): self
     {
         if ((string)$user->getId() === (string)$this->assignee)

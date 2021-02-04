@@ -108,6 +108,24 @@ class TaskCest
         }
     }
 
+    public function updateTask(AcceptanceTester $I): void
+    {
+        foreach ($this->taskDataExamples as &$taskData) {
+            $id     = $taskData['id'];
+            $status = (string)TaskStatus::done();
+
+            $I->sendPatch("tasks/$id", ['status' => $status]);
+
+            $I->seeResponseCodeIs(HttpCode::ACCEPTED);
+
+            $taskData['status'] = $status;
+        }
+
+        unset($taskData);
+
+        $this->findCreatedTasks($I);
+    }
+
     public function searchNonexistentTask(AcceptanceTester $I): void
     {
         $id = Uuid::uuid4();
