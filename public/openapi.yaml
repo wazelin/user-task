@@ -1,0 +1,398 @@
+openapi: 3.0.3
+
+info:
+  version: v1
+  title: User Task
+  description: User / Task assignment API
+
+servers:
+  - url: http://localhost/api/v1
+    description: Local (docker)
+
+paths:
+  /tasks:
+    post:
+      summary: Create a Task
+      tags:
+        - Tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskDto'
+      responses:
+        202:
+          description: Accepted
+        400:
+          description: Bad request
+        500:
+          description: Oh no, something went wrong
+    get:
+      summary: Search for a Task
+      tags:
+        - Tasks
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum:
+              - open
+              - todo
+              - done
+          description: A task status to match the results against
+        - in: query
+          name: dueDate
+          schema:
+            type: string
+            format: date
+          description: A due date of a task to match the results against
+      responses:
+        200:
+          $ref: '#/components/responses/TasksResponse'
+        400:
+          description: Bad request
+        500:
+          description: Oh no, something went wrong
+  /tasks/{id}:
+    get:
+      summary: Retrieve a Task
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          $ref: '#/components/responses/TasksResponse'
+        400:
+          description: Bad request
+        404:
+          description: Not found
+        500:
+          description: Oh no, something went wrong
+    patch:
+      summary: Update a Task
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskStatus'
+      responses:
+        202:
+          description: Accepted
+        400:
+          description: Bad request
+        404:
+          description: Not found
+        500:
+          description: Oh no, something went wrong
+  /users:
+    post:
+      summary: Create a Users
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+      responses:
+        202:
+          description: Accepted
+        400:
+          description: Bad request
+        500:
+          description: Oh no, something went wrong
+    get:
+      summary: Search for Users
+      tags:
+        - Users
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: A name to match the results against
+      responses:
+        200:
+          $ref: '#/components/responses/UsersResponse'
+        400:
+          description: Bad request
+        500:
+          description: Oh no, something went wrong
+
+  /users/{id}:
+    get:
+      summary: Retrieve a User
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          $ref: '#/components/responses/UserResponse'
+        400:
+          description: Bad request
+        404:
+          description: Not found
+        500:
+          description: Oh no, something went wrong
+
+  /users/{userId}/tasks:
+    post:
+      summary: Assign a Task to a User
+      tags:
+        - Assignments
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Identifiable'
+      responses:
+        202:
+          description: Accepted
+        400:
+          description: Bad request
+        404:
+          description: Not found
+        500:
+          description: Oh no, something went wrong
+    get:
+      summary: Search for User's assignments
+      tags:
+        - Assignments
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum:
+              - open
+              - todo
+              - done
+          description: A task status to match the results against
+        - in: query
+          name: dueDate
+          schema:
+            type: string
+            format: date
+          description: A due date of a task to match the results against
+      responses:
+        200:
+          $ref: '#/components/responses/AssignmentsResponse'
+        400:
+          description: Bad request
+        404:
+          description: Not found
+        500:
+          description: Oh no, something went wrong
+  /users/{userId}/tasks/{taskId}:
+    get:
+      summary: Get a User's assignment
+      tags:
+        - Assignments
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          $ref: '#/components/responses/AssignmentResponse'
+        400:
+          description: Bad request
+        404:
+          description: Not found
+        500:
+          description: Oh no, something went wrong
+    delete:
+      summary: Unasign a Task from a User
+      tags:
+        - Assignments
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        202:
+          description: Accepted
+        400:
+          description: Bad request
+        404:
+          description: Not found
+        500:
+          description: Oh no, something went wrong
+
+components:
+  schemas:
+    Identifiable:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+      required:
+        - id
+
+    UserDto:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+
+    PureUser:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Identifiable'
+        - $ref: '#/components/schemas/UserDto'
+
+    User:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PureUser'
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/PureTask'
+      required:
+        - tasks
+
+    TaskStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - open
+            - todo
+            - done
+      required:
+        - status
+    TaskDto:
+      type: object
+      properties:
+        summary:
+          type: string
+        description:
+          type: string
+        dueDate:
+          type: string
+          format: date
+      required:
+        - summary
+        - description
+
+    PureTask:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Identifiable'
+        - $ref: '#/components/schemas/TaskDto'
+        - $ref: '#/components/schemas/TaskStatus'
+
+    Task:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PureTask'
+      properties:
+        assignee:
+          $ref: '#/components/schemas/PureUser'
+
+  responses:
+    UsersResponse:
+      description: A collection of Users
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+    UserResponse:
+      description: A Users
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    TasksResponse:
+      description: A collection of Users
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Task'
+    TaskResponse:
+      description: A Task
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Task'
+    AssignmentsResponse:
+      description: A collection of Assignments
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/PureTask'
+    AssignmentResponse:
+      description: An assignment
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PureTask'

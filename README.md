@@ -19,6 +19,9 @@ $ make prepare-storage
 $ make stop
 ```
 
+# Documentation
+[Open API](https://editor.swagger.io/?url=https://raw.githubusercontent.com/wazelin/user-task/main/public/openapi.yaml)
+
 # Testing
 ```shell
 $ make ci
@@ -33,4 +36,3 @@ $ make replay-events
 - Authentication
 - Authorization
 - Non-blocking event bus
-- Restful API documentation
