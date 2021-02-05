@@ -28,7 +28,8 @@ test: prepare-test
 .PHONY: wait-for-storage
 wait-for-storage:
 	./docker/mysql/wait.sh \
-		&& ./docker/elasticsearch/wait.sh
+		&& ./docker/elasticsearch/wait.sh \
+		&& ./docker/rabbitmq/wait.sh
 
 .PHONY: prepare-storage
 prepare-storage: wait-for-storage
