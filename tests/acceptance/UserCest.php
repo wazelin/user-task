@@ -66,6 +66,8 @@ class UserCest
 
     public function getCreatedUsersById(AcceptanceTester $I): void
     {
+        $I->wait(1);
+
         foreach ($this->userDataExamples as $example) {
             $I->sendGet("users/{$example['id']}");
 
@@ -132,6 +134,8 @@ class UserCest
 
         $userData['tasks'][] = $taskData;
 
+        $I->wait(1);
+
         $I->sendGet("users/$userId");
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseContainsJson($userData);
@@ -195,6 +199,8 @@ class UserCest
 
         $userData['tasks'] = [$taskData];
 
+        $I->wait(1);
+
         $I->sendGet("users/$userId");
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseContainsJson($userData);
@@ -214,6 +220,8 @@ class UserCest
 
         $I->sendDelete("users/$userId/tasks/$taskId");
         $I->seeResponseCodeIs(HttpCode::ACCEPTED);
+
+        $I->wait(1);
 
         $I->sendGet("users/$userId");
         $I->seeResponseCodeIs(HttpCode::OK);

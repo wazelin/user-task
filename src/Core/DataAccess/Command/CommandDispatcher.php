@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Wazelin\UserTask\Core\DataAccess\Command;
 
-use Broadway\CommandHandling\CommandBus;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class CommandDispatcher
 {
-    public function __construct(private CommandBus $commandBus)
+    public function __construct(private MessageBusInterface $commandBus)
     {
     }
 

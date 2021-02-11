@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\User\Business\Command;
 
 use Wazelin\UserTask\Core\Business\Domain\Id;
+use Wazelin\UserTask\Core\Contract\CommandInterface;
 
-class CreateUserCommand
+class CreateUserCommand implements CommandInterface
 {
     public function __construct(private Id $id, private string $name)
     {

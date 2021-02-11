@@ -1,7 +1,5 @@
 .DEFAULT_GOAL := ci
 
-DOCKER_COMPOSE_TEST=docker-compose -f docker-compose.yml -f docker-compose-test.yml
-
 .PHONY: install
 install:
 	docker run --rm --volume $(CURDIR):/app composer install --ignore-platform-reqs
@@ -19,23 +17,17 @@ ci: stop start prepare-storage test stop
 
 .PHONY: prepare-test
 prepare-test:
-	$(DOCKER_COMPOSE_TEST) run --rm tester ./vendor/bin/codecept build
+	docker-compose exec php-fpm ./vendor/bin/codecept build
 
 .PHONY: test
 test: prepare-test
-	$(DOCKER_COMPOSE_TEST) run --rm tester ./vendor/bin/codecept run
-
-.PHONY: wait-for-storage
-wait-for-storage:
-	./docker/mysql/wait.sh \
-		&& ./docker/elasticsearch/wait.sh \
-		&& ./docker/rabbitmq/wait.sh
+	docker-compose exec php-fpm ./vendor/bin/codecept run
 
 .PHONY: prepare-storage
-prepare-storage: wait-for-storage
+prepare-storage:
 	docker-compose exec php-fpm ./bin/console core:persistence:event-store:create \
 		&& docker-compose exec php-fpm ./bin/console core:persistence:projection:create-indices
 
 .PHONY: replay-events
-replay-events: wait-for-storage
+replay-events:
 	docker-compose exec php-fpm ./bin/console core:persistence:event-store:replay
