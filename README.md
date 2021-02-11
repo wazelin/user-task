@@ -35,4 +35,3 @@ $ make replay-events
 # Out of scope
 - Authentication
 - Authorization
-- Non-blocking event bus
