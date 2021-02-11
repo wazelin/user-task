@@ -73,7 +73,19 @@ services:
       - .:/app
     depends_on:
       - php-fpm
-    command: /app/bin/console messenger:consume command -vv
+    restart: on-failure
+    command: /app/bin/console messenger:consume command -vvv
+
+  event-consumer:
+    build: ./docker/php-cli
+    networks:
+      - user-task
+    volumes:
+      - .:/app
+    depends_on:
+      - php-fpm
+    restart: on-failure
+    command: /app/bin/console messenger:consume event -vvv
 
 networks:
   user-task:

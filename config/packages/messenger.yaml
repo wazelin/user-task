@@ -6,8 +6,10 @@ framework:
     transports:
       # https://symfony.com/doc/current/messenger.html#transport-configuration
       command: '%env(COMMAND_TRANSPORT_DSN)%'
+      event: '%env(EVENTS_TRANSPORT_DSN)%'
       # failed: 'doctrine://default?queue_name=failed'
       # sync: 'sync://'
 
     routing:
       Wazelin\UserTask\Core\Contract\CommandInterface: command
+      Broadway\Domain\DomainMessage: event

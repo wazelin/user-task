@@ -6,13 +6,6 @@ broadway:
     readmodel: broadway.serializer
 
 services:
-  broadway.event_sourcing.aggregate_factory:
-    class: Broadway\EventSourcing\AggregateFactory\PublicConstructorAggregateFactory
-
-  broadway.serializer:
-    class: Wazelin\UserTask\Core\Presentation\Serializer\BroadwaySerializer
-    autowire: true
-
   Broadway\CommandHandling\CommandBus: '@broadway.command_handling.command_bus'
   Broadway\UuidGenerator\UuidGeneratorInterface: '@broadway.uuid.generator'
   Broadway\EventHandling\EventBus: '@broadway.event_handling.event_bus'

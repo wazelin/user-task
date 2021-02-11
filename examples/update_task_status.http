@@ -1,4 +1,4 @@
-PATCH http://localhost/api/v1/tasks/a516d92c-843e-4223-834f-f118bae7b099
+PATCH http://localhost/api/v1/tasks/c57f1442-bc02-4f18-add7-bb30b12be297
 Host: user-task.docker
 Accept: application/json
 
@@ -8,6 +8,6 @@ Accept: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.status === 202, "Response status is not 202");
 });
 %}

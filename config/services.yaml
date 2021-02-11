@@ -88,6 +88,15 @@ services:
     arguments:
       $aggregateClass: Wazelin\UserTask\Task\Business\Domain\Task
 
+  broadway.event_sourcing.aggregate_factory:
+    class: Broadway\EventSourcing\AggregateFactory\PublicConstructorAggregateFactory
+
+  broadway.serializer:
+    class: Wazelin\UserTask\Core\Presentation\Serializer\BroadwaySerializer
+
+  broadway.event_handling.event_bus:
+    class: Wazelin\UserTask\Core\DataAccess\Event\EventBus
+
   Wazelin\UserTask\Assignment\Business\Projector\AssignmentProjector:
     tags: [ 'broadway.domain.event_listener' ]
 

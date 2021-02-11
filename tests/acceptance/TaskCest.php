@@ -68,7 +68,7 @@ class TaskCest
 
     public function getCreatedTasksById(AcceptanceTester $I): void
     {
-        $I->wait(1);
+        $I->wait(5);
 
         foreach ($this->taskDataExamples as $example) {
             $I->sendGet("tasks/{$example['id']}");
@@ -125,7 +125,7 @@ class TaskCest
 
         unset($taskData);
 
-        $I->wait(1);
+        $I->wait(5);
 
         $this->findCreatedTasks($I);
     }
