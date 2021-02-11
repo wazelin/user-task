@@ -129,6 +129,8 @@ class UserCest
 
         $taskData['id'] = $taskId;
 
+        $I->wait(1);
+
         $I->sendPost("users/$userId/tasks", ['id' => $taskId]);
         $I->seeResponseCodeIs(HttpCode::ACCEPTED);
 
