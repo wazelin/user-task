@@ -88,20 +88,14 @@ services:
     arguments:
       $aggregateClass: Wazelin\UserTask\Task\Business\Domain\Task
 
-  Wazelin\UserTask\User\Business\Command\CreateUserCommandHandler:
-    tags: [ 'broadway.command_handler' ]
+  broadway.event_sourcing.aggregate_factory:
+    class: Broadway\EventSourcing\AggregateFactory\PublicConstructorAggregateFactory
 
-  Wazelin\UserTask\Assignment\Business\Command\AssignCommandHandler:
-    tags: [ 'broadway.command_handler' ]
+  broadway.serializer:
+    class: Wazelin\UserTask\Core\Presentation\Serializer\BroadwaySerializer
 
-  Wazelin\UserTask\Assignment\Business\Command\UnassignCommandHandler:
-    tags: [ 'broadway.command_handler' ]
-
-  Wazelin\UserTask\Task\Business\Command\CreateTaskCommandHandler:
-    tags: [ 'broadway.command_handler' ]
-
-  Wazelin\UserTask\Task\Business\Command\ChangeTaskStatusCommandHandler:
-    tags: [ 'broadway.command_handler' ]
+  broadway.event_handling.event_bus:
+    class: Wazelin\UserTask\Core\DataAccess\Event\EventBus
 
   Wazelin\UserTask\Assignment\Business\Projector\AssignmentProjector:
     tags: [ 'broadway.domain.event_listener' ]

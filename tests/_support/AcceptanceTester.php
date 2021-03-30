@@ -28,6 +28,7 @@ class AcceptanceTester extends Actor
     use EventStoreSchemaTrait;
     use PurgeProjectionIndicesTrait;
     use ReplayEventsTrait;
+    use WaitTrait;
 
     public function grabIdFromLocationHeader(): string
     {

@@ -6,8 +6,9 @@ namespace Wazelin\UserTask\Task\Business\Command;
 
 use DateTimeInterface;
 use Wazelin\UserTask\Core\Business\Domain\Id;
+use Wazelin\UserTask\Core\Contract\CommandInterface;
 
-class CreateTaskCommand
+final class CreateTaskCommand implements CommandInterface
 {
     public function __construct(
         private Id $id,

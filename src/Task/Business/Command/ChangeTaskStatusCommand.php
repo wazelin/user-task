@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Wazelin\UserTask\Task\Business\Command;
 
 use Wazelin\UserTask\Core\Business\Domain\Id;
+use Wazelin\UserTask\Core\Contract\CommandInterface;
 use Wazelin\UserTask\Task\Business\Domain\TaskStatus;
 
-class ChangeTaskStatusCommand
+final class ChangeTaskStatusCommand implements CommandInterface
 {
     public function __construct(private Id $id, private TaskStatus $status)
     {

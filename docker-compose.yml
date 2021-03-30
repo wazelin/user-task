@@ -1,12 +1,24 @@
-version: '3.7'
-
 services:
+  rabbitmq:
+    image: bitnami/rabbitmq:latest
+    expose:
+      - 5672
+    networks:
+      - user-task
+    healthcheck:
+      test: rabbitmq-diagnostics -q check_running
+    environment:
+      - RABBITMQ_USERNAME=dev
+      - RABBITMQ_PASSWORD=dev
+
   elasticsearch:
     image: elasticsearch:7.10.1
     expose:
       - 9200
     networks:
       - user-task
+    healthcheck:
+      test: curl --output /dev/null --silent --head --fail localhost:9200
     environment:
       - discovery.type=single-node
 
@@ -16,6 +28,8 @@ services:
       - 3306
     networks:
       - user-task
+    healthcheck:
+      test: mysqladmin ping -pdev | grep "mysqld is alive"
     volumes:
       - ./docker/mysql:/etc/mysql/conf.d:ro
     environment:
@@ -44,8 +58,34 @@ services:
     volumes:
       - .:/var/www/html
     depends_on:
-      - mysql
-      - elasticsearch
+      mysql:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  command-consumer:
+    build: ./docker/php-cli
+    networks:
+      - user-task
+    volumes:
+      - .:/app
+    depends_on:
+      - php-fpm
+    restart: on-failure
+    command: /app/bin/console messenger:consume command -vvv
+
+  event-consumer:
+    build: ./docker/php-cli
+    networks:
+      - user-task
+    volumes:
+      - .:/app
+    depends_on:
+      - php-fpm
+    restart: on-failure
+    command: /app/bin/console messenger:consume event -vvv
 
 networks:
   user-task:

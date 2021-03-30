@@ -1,6 +1,8 @@
-version: '3.7'
-
 services:
+  rabbitmq:
+    ports:
+      - 15672:15672
+
   elasticsearch:
     ports:
       - 9200:9200
